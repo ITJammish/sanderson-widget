@@ -7,9 +7,16 @@ import androidx.work.WorkerParameters
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.jsoup.Jsoup
+import org.jsoup.nodes.TextNode
 
 class TestWorkerClass(private val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
+
+    companion object {
+        private const val VC_LABEL = "vc_label"
+        private const val VC_BAR = "vc_bar"
+    }
 
     override fun doWork(): Result {
         Log.d("JamesDebug:", "doWork() - Start")
@@ -23,7 +30,15 @@ class TestWorkerClass(private val context: Context, workerParams: WorkerParamete
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
-                Log.d("JamesDebug:", response)
+                val doc = Jsoup.parseBodyFragment(response)
+                val projectTitles = doc.getElementsByClass(VC_LABEL).map {
+                    (it.childNode(0) as TextNode).text()
+                }
+                val projectProgress = doc.getElementsByClass(VC_BAR).map {
+                    it.attr("data-percentage-value")
+                }
+
+                // todo store titles and progress values
             },
             {
                 Log.d("JamesDebug:", "ERROR: $it")
