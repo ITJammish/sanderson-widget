@@ -4,6 +4,8 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
+import androidx.work.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Implementation of App Widget functionality.
@@ -19,6 +21,8 @@ class ProgressBars : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
+
+        startWorkRequest(context)
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
@@ -49,4 +53,20 @@ internal fun updateAppWidget(
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)
+}
+
+internal fun startWorkRequest(context: Context) {
+    val workRequestTag = "WORK_REQUEST"
+
+    val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+    val periodicWorkRequest =
+        PeriodicWorkRequestBuilder<TestWorkerClass>(15, TimeUnit.MINUTES)
+            .addTag(workRequestTag)
+            .setConstraints(constraints)
+            .build()
+
+    WorkManager
+        .getInstance(context)
+        .enqueueUniquePeriodicWork(workRequestTag, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest)
 }
