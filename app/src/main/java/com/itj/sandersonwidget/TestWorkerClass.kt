@@ -7,9 +7,13 @@ import androidx.work.WorkerParameters
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.itj.sandersonwidget.storage.SharedPreferencesStorage
 import org.jsoup.Jsoup
 import org.jsoup.nodes.TextNode
 
+/**
+ * https://medium.com/swlh/periodic-tasks-with-android-workmanager-c901dd9ba7bc
+ */
 class TestWorkerClass(private val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
 
@@ -30,15 +34,19 @@ class TestWorkerClass(private val context: Context, workerParams: WorkerParamete
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { response ->
-                val doc = Jsoup.parseBodyFragment(response)
-                val projectTitles = doc.getElementsByClass(VC_LABEL).map {
-                    (it.childNode(0) as TextNode).text()
-                }
-                val projectProgress = doc.getElementsByClass(VC_BAR).map {
-                    it.attr("data-percentage-value")
-                }
+                with(Jsoup.parseBodyFragment(response)) {
+                    val projectTitles = getElementsByClass(VC_LABEL).map {
+                        (it.childNode(0) as TextNode).text()
+                    }
+                    val projectProgress = getElementsByClass(VC_BAR).map {
+                        it.attr("data-percentage-value")
+                    }
 
-                // todo store titles and progress values
+                    // todo delegate mapping?
+                    projectTitles.zip(projectProgress)
+                        .map { pair -> "$pair.first:$pair.second" }
+                        .also { SharedPreferencesStorage(context).store(it) }
+                }
             },
             {
                 Log.d("JamesDebug:", "ERROR: $it")

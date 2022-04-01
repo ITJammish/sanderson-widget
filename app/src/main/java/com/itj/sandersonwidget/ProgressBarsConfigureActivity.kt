@@ -3,6 +3,7 @@ package com.itj.sandersonwidget
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -80,7 +81,7 @@ internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
 // Read the prefix from the SharedPreferences object for this widget.
 // If there is no preference saved, get the default from a resource
 internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
+    val prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
     val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
     return titleValue ?: context.getString(R.string.appwidget_text)
 }

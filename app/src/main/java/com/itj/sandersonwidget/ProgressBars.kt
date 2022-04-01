@@ -8,6 +8,15 @@ import androidx.work.*
 import java.util.concurrent.TimeUnit
 
 /**
+ *  TODO NEXT:
+ *  - store data in prefs -> TestWorkerClass (rename this)
+ *  - when stored trigger AppWidgetManager.ACTION_APPWIDGET_UPDATE broadcast to kick this.onUpdate
+ *  - pull data from prefs here in updateAppWidget so it pulls data for every update (and we don't have to throw data
+ *  around as extras)
+ *  - Clean everything up! Layers, single responsibility classes etc!
+ */
+
+/**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in [ProgressBarsConfigureActivity]
  */
