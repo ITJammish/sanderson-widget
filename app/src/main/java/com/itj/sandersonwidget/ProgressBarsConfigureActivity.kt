@@ -91,3 +91,15 @@ internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
     prefs.remove(PREF_PREFIX_KEY + appWidgetId)
     prefs.apply()
 }
+
+internal fun saveProgressData(context: Context): MutableSet<String> {
+    val prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+    val data = prefs.getStringSet("project_items", null)
+    return data ?: mutableSetOf("No data?")
+}
+
+internal fun loadProgressData(context: Context): MutableSet<String> {
+    val prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+    val data = prefs.getStringSet("project_items", null)
+    return data ?: mutableSetOf("No data?")
+}

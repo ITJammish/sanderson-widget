@@ -1,6 +1,9 @@
 package com.itj.sandersonwidget
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -43,9 +46,23 @@ class TestWorkerClass(private val context: Context, workerParams: WorkerParamete
                     }
 
                     // todo delegate mapping?
+                    // zip and store data
                     projectTitles.zip(projectProgress)
                         .map { pair -> "$pair.first:$pair.second" }
                         .also { SharedPreferencesStorage(context).store(it) }
+                    Log.d("JamesDebug:", "Saved stuff")
+
+                    val intent = Intent(context.applicationContext, ProgressBars::class.java).also {
+                        it.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+                    }
+                    var ids: IntArray
+                    val widgetManager = AppWidgetManager.getInstance(context).also {
+                        ids = it.getAppWidgetIds(ComponentName(context, ProgressBars::class.java))
+//                        it.notifyAppWidgetViewDataChanged(ids, android.R.id.list)
+                    }
+
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+                    context.sendBroadcast(intent)
                 }
             },
             {
