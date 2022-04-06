@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    style="@style/Widget.SandersonWidget.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:theme="@style/Theme.SandersonWidget.AppWidgetContainer">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/progress_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/progress_list_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            android:gravity="center"
+            android:text="Empty"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/appwidget_text"-->
+    <!--        style="@style/Widget.SandersonWidget.AppWidget.InnerView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="8dp"-->
+    <!--        android:contentDescription="@string/appwidget_text"-->
+    <!--        android:text="@string/appwidget_text"-->
+    <!--        android:textSize="24sp"-->
+    <!--        android:textStyle="bold|italic" />-->
+</LinearLayout>

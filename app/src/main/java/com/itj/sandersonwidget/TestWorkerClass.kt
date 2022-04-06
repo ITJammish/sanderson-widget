@@ -39,16 +39,17 @@ class TestWorkerClass(private val context: Context, workerParams: WorkerParamete
             { response ->
                 with(Jsoup.parseBodyFragment(response)) {
                     val projectTitles = getElementsByClass(VC_LABEL).map {
-                        (it.childNode(0) as TextNode).text()
+                        (it.childNode(0) as TextNode).text().trim()
                     }
                     val projectProgress = getElementsByClass(VC_BAR).map {
-                        it.attr("data-percentage-value")
+                        it.attr("data-percentage-value").trim()
                     }
 
-                    // todo delegate mapping?
+                    // todo delegate mapping? including above!
+                    // todo unit tests!
                     // zip and store data
                     projectTitles.zip(projectProgress)
-                        .map { pair -> "$pair.first:$pair.second" }
+                        .map { pair -> "${pair.first}:${pair.second}" }
                         .also { SharedPreferencesStorage(context).store(it) }
                     Log.d("JamesDebug:", "Saved stuff")
 

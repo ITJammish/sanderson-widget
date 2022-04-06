@@ -3,17 +3,17 @@ package com.itj.sandersonwidget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.work.*
+import com.itj.sandersonwidget.ui.ProgressItemWidgetService
 import java.util.concurrent.TimeUnit
 
 /**
  *  TODO NEXT:
  *  - store data in prefs -> TestWorkerClass (rename this)
- *  - when stored trigger AppWidgetManager.ACTION_APPWIDGET_UPDATE broadcast to kick this.onUpdate
- *  - pull data from prefs here in updateAppWidget so it pulls data for every update (and we don't have to throw data
- *  around as extras)
  *  - Clean everything up! Layers, single responsibility classes etc!
  */
 
@@ -44,6 +44,10 @@ class ProgressBars : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
+        // TODO if multiple widgets placed we'll have duplicate Work... any way to make this nicer?
+        //  Probably should save data against sharedPref key+widgetId, and clean this up when onDisabled
+        //  That way, while we have duplicate datasets, we aren't spinning up multiple Work and overwriting
+        //  the same data.
         // Enter relevant functionality for when the first widget is created
         startWorkRequest(context)
         Log.d("JamesDebug:", "onEnabled")
@@ -62,15 +66,18 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val data = loadProgressData(context)
-    Log.d("JamesDebug:", "updateAppWidget: $data")
-
-    // todo get data
-    val widgetText = loadTitlePref(context, appWidgetId)
     // Construct the RemoteViews object
-    // todo views for progress bars
-    val views = RemoteViews(context.packageName, R.layout.progress_bars)
-    views.setTextViewText(R.id.appwidget_text, widgetText)
+    val views = RemoteViews(context.packageName, R.layout.widget_progress_bars)
+
+    // Create and set progress list item adapter intent
+    val progressItemServiceIntent = Intent(context, ProgressItemWidgetService::class.java).also {
+        it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        it.data = Uri.parse(it.toUri(Intent.URI_INTENT_SCHEME))
+    }
+    views.apply {
+        setRemoteAdapter(R.id.progress_item_list, progressItemServiceIntent)
+        setEmptyView(R.id.progress_item_list, R.id.progress_list_empty_view)
+    }
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)
