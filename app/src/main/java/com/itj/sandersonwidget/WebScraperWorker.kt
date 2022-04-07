@@ -17,10 +17,11 @@ import org.jsoup.nodes.TextNode
 /**
  * https://medium.com/swlh/periodic-tasks-with-android-workmanager-c901dd9ba7bc
  */
-class TestWorkerClass(private val context: Context, workerParams: WorkerParameters) :
+class WebScraperWorker(private val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
 
     companion object {
+        private const val TARGET_PAGE_URL = "https://www.brandonsanderson.com/"
         private const val VC_LABEL = "vc_label"
         private const val VC_BAR = "vc_bar"
     }
@@ -31,11 +32,10 @@ class TestWorkerClass(private val context: Context, workerParams: WorkerParamete
         // from: https://developer.android.com/training/volley/simple
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(context)
-        val url = "https://www.brandonsanderson.com/"
 
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(
-            Request.Method.GET, url,
+            Request.Method.GET, TARGET_PAGE_URL,
             { response ->
                 with(Jsoup.parseBodyFragment(response)) {
                     val projectTitles = getElementsByClass(VC_LABEL).map {

@@ -8,10 +8,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import com.itj.sandersonwidget.databinding.ProgressBarsConfigureBinding
+import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 
 /**
  * The configuration screen for the [ProgressBars] AppWidget.
+ *
+ * Keeping up with Brandon
+ *
+ * Toggles:
+ * - Show progress bars
+ * - Show articles
+ * - Receive notifications for:
+ *      - Progress updates
+ *      - New articles
+ *
+ * Styles:
+ * - Themes/backgrounds from major book series?
  */
 class ProgressBarsConfigureActivity : Activity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
@@ -33,7 +45,7 @@ class ProgressBarsConfigureActivity : Activity() {
         setResult(RESULT_OK, resultValue)
         finish()
     }
-    private lateinit var binding: ProgressBarsConfigureBinding
+    private lateinit var binding: ActivityProgressBarsConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -42,7 +54,7 @@ class ProgressBarsConfigureActivity : Activity() {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-        binding = ProgressBarsConfigureBinding.inflate(layoutInflater)
+        binding = ActivityProgressBarsConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         appWidgetText = binding.appwidgetText as EditText

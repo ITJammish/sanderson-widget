@@ -89,7 +89,7 @@ internal fun startWorkRequest(context: Context) {
     val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
     val periodicWorkRequest =
-        PeriodicWorkRequestBuilder<TestWorkerClass>(15, TimeUnit.MINUTES)
+        PeriodicWorkRequestBuilder<WebScraperWorker>(15, TimeUnit.MINUTES)
             .addTag(workRequestTag)
             .setConstraints(constraints)
             .build()
