@@ -9,10 +9,10 @@ import com.itj.sandersonwidget.domain.ProgressItem
 class SharedPreferencesStorage(context: Context) : Storage {
 
     companion object {
-        private const val PREFS_NAME = "com.itj.sandersonwidget.ProgressBars"
-        private const val PROJECT_ITEMS = "progress_items"
-        private const val ARTICLES = "articles"
-        private const val DELIMITER = "DELIMITER"
+        internal const val PREFS_NAME = "com.itj.sandersonwidget.ProgressBars"
+        internal const val PROJECT_ITEMS = "progress_items"
+        internal const val ARTICLES = "articles"
+        internal const val DELIMITER = "DELIMITER"
     }
 
     private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
