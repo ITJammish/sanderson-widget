@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SandersonWidget">
         <receiver
-            android:name=".ProgressBars"
+            android:name=".ProgressBarsWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

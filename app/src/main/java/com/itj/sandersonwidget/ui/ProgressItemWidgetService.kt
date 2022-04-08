@@ -7,7 +7,8 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.itj.sandersonwidget.R
-import com.itj.sandersonwidget.loadProgressData
+import com.itj.sandersonwidget.domain.ProgressItem
+import com.itj.sandersonwidget.storage.SharedPreferencesStorage
 
 /**
  * https://www.youtube.com/watch?v=MMiuy9jK6X8&list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K&index=4
@@ -22,16 +23,11 @@ class ProgressItemWidgetService : RemoteViewsService() {
         intent: Intent?
     ) : RemoteViewsFactory {
         private val appWidgetId = intent?.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
-        private lateinit var data: List<Pair<String, String>>
+        private lateinit var data: List<ProgressItem>
 
         override fun onCreate() {
             // connect to data source - fetch data from storage (MAIN THREAD) (only grab cache, don't make network)
-            // todo move mapping to loadProgressData: List<Pair<String, String>> or own mapper that can be unit tested
-            //  but still run in activity method
-            // todo consider architecture: Domain model over List<Pair<String, String>> -> more extensible
-            val storedData = loadProgressData(context)
-            data = storedData.map { storedItem -> storedItem.split(":") }
-                .map { splitItem -> Pair(splitItem[0], splitItem[1]) }
+            data = SharedPreferencesStorage(context).retrieveProgressItemData()
         }
 
         override fun onDataSetChanged() {
@@ -49,9 +45,9 @@ class ProgressItemWidgetService : RemoteViewsService() {
         override fun getViewAt(position: Int): RemoteViews {
             val item = RemoteViews(context.packageName, R.layout.view_progress_item).also {
                 with(it) {
-                    setTextViewText(R.id.item_title, data[position].first)
-                    setProgressBar(R.id.item_progress_bar, 100, data[position].second.toInt(), false)
-                    setTextViewText(R.id.item_percentage, "${data[position].second}%")
+                    setTextViewText(R.id.item_title, data[position].label)
+                    setProgressBar(R.id.item_progress_bar, 100, data[position].progressPercentage.toInt(), false)
+                    setTextViewText(R.id.item_percentage, "${data[position].progressPercentage}%")
                 }
             }
             return item

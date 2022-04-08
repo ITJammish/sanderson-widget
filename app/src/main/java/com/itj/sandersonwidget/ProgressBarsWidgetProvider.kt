@@ -12,16 +12,10 @@ import com.itj.sandersonwidget.ui.ProgressItemWidgetService
 import java.util.concurrent.TimeUnit
 
 /**
- *  TODO NEXT:
- *  - store data in prefs -> TestWorkerClass (rename this)
- *  - Clean everything up! Layers, single responsibility classes etc!
- */
-
-/**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in [ProgressBarsConfigureActivity]
  */
-class ProgressBars : AppWidgetProvider() {
+class ProgressBarsWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(
         context: Context,
@@ -85,9 +79,7 @@ internal fun updateAppWidget(
 
 internal fun startWorkRequest(context: Context) {
     val workRequestTag = "WORK_REQUEST"
-
     val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-
     val periodicWorkRequest =
         PeriodicWorkRequestBuilder<WebScraperWorker>(15, TimeUnit.MINUTES)
             .addTag(workRequestTag)

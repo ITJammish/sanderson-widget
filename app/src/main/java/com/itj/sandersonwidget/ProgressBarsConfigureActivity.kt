@@ -11,7 +11,7 @@ import android.widget.EditText
 import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 
 /**
- * The configuration screen for the [ProgressBars] AppWidget.
+ * The configuration screen for the [ProgressBarsWidgetProvider] AppWidget.
  *
  * Keeping up with Brandon
  *
@@ -102,16 +102,4 @@ internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
     val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
     prefs.remove(PREF_PREFIX_KEY + appWidgetId)
     prefs.apply()
-}
-
-internal fun saveProgressData(context: Context): MutableSet<String> {
-    val prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-    val data = prefs.getStringSet("project_items", null)
-    return data ?: mutableSetOf("No data?")
-}
-
-internal fun loadProgressData(context: Context): MutableSet<String> {
-    val prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-    val data = prefs.getStringSet("project_items", null)
-    return data ?: mutableSetOf("No data?")
 }
