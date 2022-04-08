@@ -8,6 +8,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.work.*
+import com.itj.sandersonwidget.network.WebScraperWorker
 import com.itj.sandersonwidget.ui.ProgressItemWidgetService
 import java.util.concurrent.TimeUnit
 

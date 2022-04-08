@@ -1,4 +1,4 @@
-package com.itj.sandersonwidget
+package com.itj.sandersonwidget.network
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -10,11 +10,9 @@ import androidx.work.WorkerParameters
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.itj.sandersonwidget.domain.Article
-import com.itj.sandersonwidget.domain.ProgressItem
+import com.itj.sandersonwidget.ProgressBarsWidgetProvider
 import com.itj.sandersonwidget.storage.SharedPreferencesStorage
 import org.jsoup.Jsoup
-import org.jsoup.nodes.TextNode
 
 /**
  * https://medium.com/swlh/periodic-tasks-with-android-workmanager-c901dd9ba7bc
@@ -24,11 +22,8 @@ class WebScraperWorker(private val context: Context, workerParams: WorkerParamet
     Worker(context, workerParams) {
 
     companion object {
-        private const val ARTICLE_COUNT = 5
-
         private const val TARGET_PAGE_URL = "https://www.brandonsanderson.com/"
-        private const val VC_LABEL = "vc_label"
-        private const val VC_BAR = "vc_bar"
+        private const val ARTICLE_COUNT = 5
     }
 
     override fun doWork(): Result {
@@ -44,37 +39,15 @@ class WebScraperWorker(private val context: Context, workerParams: WorkerParamet
             { response ->
                 with(Jsoup.parseBodyFragment(response)) {
 
-                    // todo delegate mapping TODO AFTER LUNCH
-                    // Process progress bar data
-                    val projectTitles = getElementsByClass(VC_LABEL).map {
-                        (it.childNode(0) as TextNode).text().trim()
-                    }
-                    val projectProgress = getElementsByClass(VC_BAR).map {
-                        it.attr("data-percentage-value").trim()
-                    }
-
-                    // zip and store
-                    projectTitles.zip(projectProgress)
-                        .map { pair -> ProgressItem(label = pair.first, progressPercentage = pair.second) }
-                        .also { SharedPreferencesStorage(context).storeProgressItemData(it) }
-
-
-                    // Process article data
-                    val postNames = getElementsByClass("entry-title").select("a")
-                        .take(ARTICLE_COUNT)
-                        .map {
-                            Pair(it.text(), it.attr("href"))
+                    JsonParser().also {
+                        // Process and store progress bar data
+                        it.parseProjectProgress(this).also { progressItems ->
+                            SharedPreferencesStorage(context).storeProgressItemData(progressItems)
                         }
-                    val thumbnailUrls = getElementsByClass("blog-thumb-lazy-load preload-me lazy-load")
-                        .take(ARTICLE_COUNT)
-                        .map {
-                            it.attr("data-srcset").split(",")[0].split(" ")[0]
-                        }
-
-                    // zip and store
-                    postNames.zip(thumbnailUrls)
-                        .map { pair -> Article(pair.first.first, pair.first.second, pair.second) }
-                        .also { SharedPreferencesStorage(context).storeArticleData(it) }
+                        // Process and store article data
+                        it.parseArticles(this, ARTICLE_COUNT).also { articles ->
+                            SharedPreferencesStorage(context).storeArticleData(articles) }
+                    }
 
 
                     // Prompt widget update
