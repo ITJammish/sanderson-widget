@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.itj.sandersonwidget.domain.WebScraperResponseHandler
 
 /**
  * A [Worker] that uses [Volley] to fetch the HTML content of Brandon Sanderson's websites

@@ -1,7 +1,7 @@
-package com.itj.sandersonwidget.network
+package com.itj.sandersonwidget.domain
 
-import com.itj.sandersonwidget.domain.Article
-import com.itj.sandersonwidget.domain.ProgressItem
+import com.itj.sandersonwidget.domain.model.Article
+import com.itj.sandersonwidget.domain.model.ProgressItem
 import org.jsoup.Jsoup
 import org.junit.Assert.assertEquals
 import org.junit.Before

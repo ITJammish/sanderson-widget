@@ -1,4 +1,4 @@
-package com.itj.sandersonwidget.domain
+package com.itj.sandersonwidget.domain.model
 
 data class Article(
     val title: String,

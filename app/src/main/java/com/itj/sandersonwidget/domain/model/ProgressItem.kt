@@ -1,4 +1,4 @@
-package com.itj.sandersonwidget.domain
+package com.itj.sandersonwidget.domain.model
 
 class ProgressItem(
     val label: String,

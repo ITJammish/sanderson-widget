@@ -1,9 +1,9 @@
-package com.itj.sandersonwidget.storage
+package com.itj.sandersonwidget.domain.storage
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import com.itj.sandersonwidget.domain.Article
-import com.itj.sandersonwidget.domain.ProgressItem
+import com.itj.sandersonwidget.domain.model.Article
+import com.itj.sandersonwidget.domain.model.ProgressItem
 
 class SharedPreferencesStorage(context: Context) : Storage {
 

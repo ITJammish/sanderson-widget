@@ -1,13 +1,13 @@
-package com.itj.sandersonwidget.network
+package com.itj.sandersonwidget.domain
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.itj.sandersonwidget.domain.Article
-import com.itj.sandersonwidget.domain.ProgressItem
-import com.itj.sandersonwidget.network.WebScraperResponseHandler.Companion.ARTICLE_COUNT
-import com.itj.sandersonwidget.storage.Storage
+import com.itj.sandersonwidget.domain.model.Article
+import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.WebScraperResponseHandler.Companion.ARTICLE_COUNT
+import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.utils.ComponentNameFetcher
 import com.itj.sandersonwidget.utils.IntentProvider
 import io.mockk.every

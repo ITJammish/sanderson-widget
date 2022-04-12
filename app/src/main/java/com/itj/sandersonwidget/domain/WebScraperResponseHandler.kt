@@ -1,9 +1,9 @@
-package com.itj.sandersonwidget.network
+package com.itj.sandersonwidget.domain
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import com.itj.sandersonwidget.storage.SharedPreferencesStorage
-import com.itj.sandersonwidget.storage.Storage
+import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
+import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.utils.ComponentNameFetcher
 import com.itj.sandersonwidget.utils.ComponentNameFetcherImpl
 import com.itj.sandersonwidget.utils.IntentProvider

@@ -1,14 +1,14 @@
-package com.itj.sandersonwidget.storage
+package com.itj.sandersonwidget.domain.storage
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.itj.sandersonwidget.domain.Article
-import com.itj.sandersonwidget.domain.ProgressItem
-import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.ARTICLES
-import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.DELIMITER
-import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.PREFS_NAME
-import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.PROJECT_ITEMS
+import com.itj.sandersonwidget.domain.model.Article
+import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.ARTICLES
+import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.DELIMITER
+import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.PREFS_NAME
+import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.PROJECT_ITEMS
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

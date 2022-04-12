@@ -7,8 +7,8 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.itj.sandersonwidget.R
-import com.itj.sandersonwidget.domain.ProgressItem
-import com.itj.sandersonwidget.storage.SharedPreferencesStorage
+import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 
 /**
  * https://www.youtube.com/watch?v=MMiuy9jK6X8&list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K&index=4
