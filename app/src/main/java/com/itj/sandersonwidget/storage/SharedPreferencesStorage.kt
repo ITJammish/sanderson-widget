@@ -5,7 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import com.itj.sandersonwidget.domain.Article
 import com.itj.sandersonwidget.domain.ProgressItem
 
-// TODO unit tests
 class SharedPreferencesStorage(context: Context) : Storage {
 
     companion object {

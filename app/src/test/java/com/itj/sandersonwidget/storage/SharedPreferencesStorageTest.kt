@@ -3,7 +3,9 @@ package com.itj.sandersonwidget.storage
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.itj.sandersonwidget.domain.Article
 import com.itj.sandersonwidget.domain.ProgressItem
+import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.ARTICLES
 import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.DELIMITER
 import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.PREFS_NAME
 import com.itj.sandersonwidget.storage.SharedPreferencesStorage.Companion.PROJECT_ITEMS
@@ -31,6 +33,21 @@ class SharedPreferencesStorageTest {
             "2${DELIMITER}label3${DELIMITER}percentage3",
             "0${DELIMITER}label1${DELIMITER}percentage1",
             "1${DELIMITER}label2${DELIMITER}percentage2",
+        ).toMutableSet()
+        val articles = listOf(
+            Article("title1", "articleUrl1", "thumbnailUrl1"),
+            Article("title2", "articleUrl2", "thumbnailUrl2"),
+            Article("title3", "articleUrl3", "thumbnailUrl3"),
+        )
+        val expectedEncodedArticles = listOf(
+            "0${DELIMITER}title1${DELIMITER}articleUrl1${DELIMITER}thumbnailUrl1",
+            "1${DELIMITER}title2${DELIMITER}articleUrl2${DELIMITER}thumbnailUrl2",
+            "2${DELIMITER}title3${DELIMITER}articleUrl3${DELIMITER}thumbnailUrl3",
+        ).toMutableSet()
+        val expectedEncodedArticlesUnsorted = listOf(
+            "1${DELIMITER}title2${DELIMITER}articleUrl2${DELIMITER}thumbnailUrl2",
+            "2${DELIMITER}title3${DELIMITER}articleUrl3${DELIMITER}thumbnailUrl3",
+            "0${DELIMITER}title1${DELIMITER}articleUrl1${DELIMITER}thumbnailUrl1",
         ).toMutableSet()
     }
 
@@ -78,14 +95,32 @@ class SharedPreferencesStorageTest {
         assert(progressItemsResult.isEmpty())
     }
 
-    // TODO Monday: continue writing UnitTests for any class that can be tested
-    //  then go back to tutorials and pull in article views -> make it look nice
-    //  See other todos, config, notifications etc
     @Test
     fun storeArticleData() {
+        subject.storeArticleData(articles)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putStringSet(ARTICLES, expectedEncodedArticles)
+            mockSharedPreferencesEditor.apply()
+        }
     }
 
     @Test
-    fun retrieveArticleData() {
+    fun retrieveArticleData_returns_data() {
+        every { mockSharedPreferences.getStringSet(ARTICLES, emptySet()) } returns expectedEncodedArticlesUnsorted
+
+        val articlesResult = subject.retrieveArticleData()
+
+        assertEquals(articles, articlesResult)
+    }
+
+    @Test
+    fun retrieveArticleData_returns_empty() {
+        every { mockSharedPreferences.getStringSet(ARTICLES, emptySet()) } returns emptySet()
+
+        val articlesResult = subject.retrieveArticleData()
+
+        assert(articlesResult.isEmpty())
     }
 }

@@ -5,7 +5,10 @@ import com.itj.sandersonwidget.domain.ProgressItem
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.TextNode
 
-class JsonParser {
+/**
+ * Parses data based on html implementation of https://www.brandonsanderson.com/ on 12/04/2022
+ */
+class HTMLParser {
 
     companion object {
         private const val PROGRESS_BAR_LABEL = "vc_label"
