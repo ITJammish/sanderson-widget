@@ -13,7 +13,14 @@ import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 /**
  * https://www.youtube.com/watch?v=MMiuy9jK6X8&list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K&index=4
  */
+// Number of items: uses items from the back of the list in cases where preceding items are shown with a full progress
+// widget
 class ProgressItemWidgetService : RemoteViewsService() {
+
+    companion object {
+        const val NUMBER_OF_ITEMS = "number_of_items"
+        private const val USE_ALL_ITEMS = 0
+    }
 
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
         return ProgressItemWidgetFactory(applicationContext, intent)
@@ -21,19 +28,19 @@ class ProgressItemWidgetService : RemoteViewsService() {
 
     internal class ProgressItemWidgetFactory(
         private val context: Context,
-        intent: Intent?
+        intent: Intent?,
     ) : RemoteViewsFactory {
 
         private val appWidgetId = intent?.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
+        private val numberOfItems = intent?.getIntExtra(NUMBER_OF_ITEMS, USE_ALL_ITEMS) ?: USE_ALL_ITEMS
         private lateinit var data: List<ProgressItem>
 
         override fun onCreate() {
-            // connect to data source - fetch data from storage (MAIN THREAD) (only grab cache, don't make network)
-            data = SharedPreferencesStorage(context).retrieveProgressItemData()
+            // connect to data source
         }
 
         override fun onDataSetChanged() {
-            // NI
+            data = SharedPreferencesStorage(context).retrieveProgressItemData()
         }
 
         override fun onDestroy() {
@@ -41,16 +48,35 @@ class ProgressItemWidgetService : RemoteViewsService() {
         }
 
         override fun getCount(): Int {
-            return data.size
+            /**
+             * 2022-05-03 14:32:40.184 8952-8964/com.itj.sandersonwidget E/AndroidRuntime: FATAL EXCEPTION: Binder:8952_1
+            Process: com.itj.sandersonwidget, PID: 8952
+            kotlin.UninitializedPropertyAccessException: lateinit property data has not been initialized
+            at com.itj.sandersonwidget.ui.ProgressItemWidgetService$ProgressItemWidgetFactory.getCount(ProgressItemWidgetService.kt:43)
+            at android.widget.RemoteViewsService$RemoteViewsFactoryAdapter.getCount(RemoteViewsService.java:154)
+            at com.android.internal.widget.IRemoteViewsFactory$Stub.onTransact(IRemoteViewsFactory.java:75)
+            at android.os.Binder.execTransact(Binder.java:565)
+            2022-05-03 14:32:40.212 1346-1369/? E/SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+             */
+            return if (numberOfItems == USE_ALL_ITEMS || data.size < numberOfItems) {
+                data.size
+            } else {
+                numberOfItems
+            }
         }
 
         override fun getViewAt(position: Int): RemoteViews {
-            val item = RemoteViews(context.packageName, R.layout.view_progress_item).apply {
-                setTextViewText(R.id.item_title, data[position].label)
-                setProgressBar(R.id.item_progress_bar, 100, data[position].progressPercentage.toInt(), false)
-                setTextViewText(R.id.item_percentage, "${data[position].progressPercentage}%")
+            val imposedPosition = if (data.size < numberOfItems) {
+                position
+            } else {
+                position + (data.size - numberOfItems)
             }
-            return item
+
+            return RemoteViews(context.packageName, R.layout.item_view_progress).apply {
+                setTextViewText(R.id.item_title, data[imposedPosition].label)
+                setProgressBar(R.id.item_progress_bar, 100, data[imposedPosition].progressPercentage.toInt(), false)
+                setTextViewText(R.id.item_percentage, "${data[imposedPosition].progressPercentage}%")
+            }
         }
 
         override fun getLoadingView(): RemoteViews? {

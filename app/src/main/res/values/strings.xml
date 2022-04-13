@@ -4,4 +4,5 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">Widget displaying Brandon Sanderson\'s writing progress</string>
+    <string name="enable_article_view_label">Enable article view</string>
 </resources>

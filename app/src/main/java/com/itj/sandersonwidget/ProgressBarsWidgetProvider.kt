@@ -1,21 +1,20 @@
 package com.itj.sandersonwidget
 
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_MUTABLE
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
+import android.os.Bundle
 import android.util.Log
-import android.widget.RemoteViews
 import androidx.work.*
-import com.itj.sandersonwidget.ProgressBarsWidgetProvider.Companion.ACTION_ARTICLE_CLICK
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.network.WebScraperWorker
-import com.itj.sandersonwidget.ui.ArticleListWidgetService
-import com.itj.sandersonwidget.ui.ProgressItemWidgetService
+import com.itj.sandersonwidget.ui.DimensionSize.Small
+import com.itj.sandersonwidget.ui.GridSize
+import com.itj.sandersonwidget.ui.layouts.LayoutProvider
+import com.itj.sandersonwidget.ui.getGridSizePortrait
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,9 +43,10 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
-        for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
-        }
+//        for (appWidgetId in appWidgetIds) {
+            // todo this is broken and removing data before it can be used
+//            SharedPreferencesStorage(context).clearAll()
+//        }
     }
 
     override fun onEnabled(context: Context) {
@@ -82,50 +82,44 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
         }
         super.onReceive(context, intent)
     }
+
+    // Link with suggestions for catching widget resize events (Default doesn't work on Samsung apparently -_-)
+    // https://stackoverflow.com/questions/17396045/how-to-catch-widget-size-changes-on-devices-where-onappwidgetoptionschanged-not
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        // todo only for api <31
+        newOptions?.let {
+            val newMinWidth = it.get(OPTION_APPWIDGET_MIN_WIDTH) as Int? ?: -1
+            val newMinHeight = it.get(OPTION_APPWIDGET_MIN_HEIGHT) as Int? ?: -1
+            val newMaxHeight = it.get(OPTION_APPWIDGET_MAX_HEIGHT) as Int? ?: -1
+            val gridSize = getGridSizePortrait(newMinWidth, newMinHeight, newMaxHeight)
+            if (newMinWidth != -1 && newMinWidth != -1) {
+                updateAppWidget(context, appWidgetManager, appWidgetId, gridSize)
+            }
+        }
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+    }
 }
 
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
-    appWidgetId: Int
+    appWidgetId: Int,
+    gridSize: GridSize = GridSize(Small, Small),
 ) {
-    // TODO read config and inflate different widget layouts (sans articles etc)
-    // Construct the RemoteViews object
-    val views = RemoteViews(context.packageName, R.layout.widget_progress_bars)
-
-    // Create and set progress list item adapter intent
-    val progressItemServiceIntent = Intent(context, ProgressItemWidgetService::class.java).also {
-        it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        it.data = Uri.parse(it.toUri(Intent.URI_INTENT_SCHEME))
-    }
-    views.apply {
-        setRemoteAdapter(R.id.progress_item_list, progressItemServiceIntent)
-        setEmptyView(R.id.progress_item_list, R.id.progress_list_empty_view)
-    }
-
-    // Create and set article stack adapter intent
-    val articleStackServiceIntent = Intent(context, ArticleListWidgetService::class.java).also {
-        it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        it.data = Uri.parse(it.toUri(Intent.URI_INTENT_SCHEME))
-    }
-    val articleClickIntent = Intent(context, ProgressBarsWidgetProvider::class.java).apply {
-        action = ACTION_ARTICLE_CLICK
-    }
-    // Todo extract method to handle SDK checks more cleanly
-    val clickArticlePendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        PendingIntent.getBroadcast(context, 0, articleClickIntent, FLAG_MUTABLE)
-    } else {
-        // Todo test with older Android versions
-        PendingIntent.getBroadcast(context, 0, articleClickIntent, 0)
-    }
-    views.apply {
-        setRemoteAdapter(R.id.article_stack, articleStackServiceIntent)
-        setEmptyView(R.id.article_stack, R.id.article_stack_empty_view)
-        setPendingIntentTemplate(R.id.article_stack, clickArticlePendingIntent)
-    }
+    val views = LayoutProvider().fetchLayout(context, appWidgetId, gridSize)
 
     // Instruct the widget manager to update the widget
-    appWidgetManager.updateAppWidget(appWidgetId, views)
+    with(appWidgetManager) {
+        updateAppWidget(appWidgetId, views)
+        // TODO not sure if notify methods are required if we're calling a full refresh: https://developer.android.com/guide/topics/appwidgets/advanced
+//        notifyAppWidgetViewDataChanged(appWidgetId, R.id.progress_item_list)
+//        notifyAppWidgetViewDataChanged(appWidgetId, R.id.article_stack)
+    }
 }
 
 internal fun startWorkRequest(context: Context) {

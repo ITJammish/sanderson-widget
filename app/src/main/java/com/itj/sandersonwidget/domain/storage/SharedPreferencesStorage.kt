@@ -11,10 +11,20 @@ class SharedPreferencesStorage(context: Context) : Storage {
         internal const val PREFS_NAME = "com.itj.sandersonwidget.ProgressBars"
         internal const val PROJECT_ITEMS = "progress_items"
         internal const val ARTICLES = "articles"
+        internal const val PREF_ARTICLES_ENABLED = "pref_articles_enabled"
+
         internal const val DELIMITER = "DELIMITER"
     }
 
     private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+
+    // Clear widget specific data: currently there is no per-widget data stored todo!
+    override fun clearAll() {
+        sharedPreferences.edit()
+            .remove(PROJECT_ITEMS)
+            .remove(ARTICLES)
+            .apply()
+    }
 
     // todo take in widget id so multiple widgets have their own data
     override fun storeProgressItemData(items: List<ProgressItem>) {
@@ -53,5 +63,17 @@ class SharedPreferencesStorage(context: Context) : Storage {
             .map { encodedArticle -> encodedArticle.split(DELIMITER) }
             .sortedBy { it[0].toInt() }
             .map { Article(it[1], it[2], it[3]) }
+    }
+
+    // Widget Preferences
+    override fun storeArticlesEnabled(articlesEnabled: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(PREF_ARTICLES_ENABLED, articlesEnabled)
+            apply()
+        }
+    }
+
+    override fun retrieveArticlesEnabled(): Boolean {
+        return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED, true)
     }
 }
