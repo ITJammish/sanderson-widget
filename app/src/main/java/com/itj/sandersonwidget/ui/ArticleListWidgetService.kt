@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.bumptech.glide.Glide
+import com.itj.sandersonwidget.ProgressBarsWidgetProvider.Companion.EXTRA_ARTICLE_POSITION
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
@@ -60,6 +61,12 @@ class ArticleListWidgetService : RemoteViewsService() {
                 articleImage?.let { setImageViewBitmap(R.id.article_image, it) }
                     ?: setTextViewText(R.id.article_title, data[position].title)
             }
+
+            // Apply a fill intent to broadcast the item's position when clicked
+            Intent().apply { putExtra(EXTRA_ARTICLE_POSITION, position) }.also {
+                item.setOnClickFillInIntent(R.id.article_root_view, it)
+            }
+
             return item
         }
 
