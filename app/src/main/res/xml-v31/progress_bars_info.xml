@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- N.B Ensure any changes are also reflected in xml-v31 -->
+<?xml version="1.0" encoding="utf-8"?><!-- N.B Ensure any changes are also reflected in xml -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.itj.sandersonwidget.ProgressBarsConfigureActivity"
     android:description="@string/app_widget_description"
@@ -9,6 +9,9 @@
     android:minResizeWidth="110dp"
     android:minResizeHeight="40dp"
     android:previewImage="@drawable/example_appwidget_preview"
+    android:previewLayout="@layout/widget_progress_bars"
     android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="1"
+    android:targetCellHeight="1"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />

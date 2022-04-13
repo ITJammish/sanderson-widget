@@ -4,32 +4,31 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import com.bumptech.glide.Glide
 import com.itj.sandersonwidget.R
-import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 
-/**
- * https://www.youtube.com/watch?v=MMiuy9jK6X8&list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K&index=4
- */
-class ProgressItemWidgetService : RemoteViewsService() {
+
+class ArticleListWidgetService : RemoteViewsService() {
 
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
-        return ProgressItemWidgetFactory(applicationContext, intent)
+        return ArticleListWidgetFactory(applicationContext, intent)
     }
 
-    internal class ProgressItemWidgetFactory(
+    internal class ArticleListWidgetFactory(
         private val context: Context,
         intent: Intent?
     ) : RemoteViewsFactory {
 
         private val appWidgetId = intent?.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
-        private lateinit var data: List<ProgressItem>
+        private lateinit var data: List<Article>
 
         override fun onCreate() {
-            // connect to data source - fetch data from storage (MAIN THREAD) (only grab cache, don't make network)
-            data = SharedPreferencesStorage(context).retrieveProgressItemData()
+            data = SharedPreferencesStorage(context).retrieveArticleData()
         }
 
         override fun onDataSetChanged() {
@@ -37,7 +36,7 @@ class ProgressItemWidgetService : RemoteViewsService() {
         }
 
         override fun onDestroy() {
-            // close any datasource connections
+            // NI
         }
 
         override fun getCount(): Int {
@@ -45,10 +44,21 @@ class ProgressItemWidgetService : RemoteViewsService() {
         }
 
         override fun getViewAt(position: Int): RemoteViews {
-            val item = RemoteViews(context.packageName, R.layout.view_progress_item).apply {
-                setTextViewText(R.id.item_title, data[position].label)
-                setProgressBar(R.id.item_progress_bar, 100, data[position].progressPercentage.toInt(), false)
-                setTextViewText(R.id.item_percentage, "${data[position].progressPercentage}%")
+            var articleImage: Bitmap? = null
+            try {
+                articleImage = Glide.with(context)
+                    .asBitmap()
+                    .load(data[position].thumbnailUrl)
+                    .submit(512, 512) // todo change image sizes to match tutorial recommended/aspect ratio of source
+                    .get()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            // Set image to View if image could be loaded, otherwise display the article title.
+            val item = RemoteViews(context.packageName, R.layout.view_article_preview).apply {
+                articleImage?.let { setImageViewBitmap(R.id.article_image, it) }
+                    ?: setTextViewText(R.id.article_title, data[position].title)
             }
             return item
         }

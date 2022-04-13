@@ -39,6 +39,9 @@
         <service
             android:name=".ui.ProgressItemWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".ui.ArticleListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

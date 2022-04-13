@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.RemoteViews
 import androidx.work.*
 import com.itj.sandersonwidget.network.WebScraperWorker
+import com.itj.sandersonwidget.ui.ArticleListWidgetService
 import com.itj.sandersonwidget.ui.ProgressItemWidgetService
 import java.util.concurrent.TimeUnit
 
@@ -61,6 +62,7 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
+    // TODO read config and inflate different widget layouts (sans articles etc)
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.widget_progress_bars)
 
@@ -72,6 +74,16 @@ internal fun updateAppWidget(
     views.apply {
         setRemoteAdapter(R.id.progress_item_list, progressItemServiceIntent)
         setEmptyView(R.id.progress_item_list, R.id.progress_list_empty_view)
+    }
+
+    // Create and set article stack adapter intent
+    val articleStackServiceIntent = Intent(context, ArticleListWidgetService::class.java).also {
+        it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        it.data = Uri.parse(it.toUri(Intent.URI_INTENT_SCHEME))
+    }
+    views.apply {
+        setRemoteAdapter(R.id.article_stack, articleStackServiceIntent)
+        setEmptyView(R.id.article_stack, R.id.article_stack_empty_view)
     }
 
     // Instruct the widget manager to update the widget

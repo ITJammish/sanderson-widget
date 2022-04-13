@@ -25,7 +25,7 @@ class WebScraperResponseHandler(
 ) {
 
     companion object {
-        internal const val ARTICLE_COUNT = 5
+        internal const val ARTICLE_COUNT = 20
     }
 
     fun handleWebScrapedResponse(response: String) {
