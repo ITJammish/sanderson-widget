@@ -37,7 +37,8 @@ class WebScraperWorker(private val context: Context, workerParams: WorkerParamet
             },
         ).also {
             // Add the request to the RequestQueue.
-            queue.add(it)
+            // TODO killed network request while working on canvas spike
+//            queue.add(it)
         }
 
         return Result.success()

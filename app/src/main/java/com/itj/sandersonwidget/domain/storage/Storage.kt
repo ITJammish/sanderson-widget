@@ -6,6 +6,8 @@ import com.itj.sandersonwidget.domain.model.ProgressItem
 // TODO accept and return Domain object and handle conversion for prefs storage in impl
 interface Storage {
 
+    fun clearAll()
+
     fun storeProgressItemData(items: List<ProgressItem>)
 
     fun retrieveProgressItemData(): List<ProgressItem>
@@ -13,4 +15,8 @@ interface Storage {
     fun storeArticleData(items: List<Article>)
 
     fun retrieveArticleData(): List<Article>
+
+    fun storeArticlesEnabled(articlesEnabled: Boolean)
+
+    fun retrieveArticlesEnabled(): Boolean
 }

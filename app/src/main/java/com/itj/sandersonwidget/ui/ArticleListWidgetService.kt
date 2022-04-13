@@ -29,11 +29,10 @@ class ArticleListWidgetService : RemoteViewsService() {
         private lateinit var data: List<Article>
 
         override fun onCreate() {
-            data = SharedPreferencesStorage(context).retrieveArticleData()
         }
 
         override fun onDataSetChanged() {
-            // NI
+            data = SharedPreferencesStorage(context).retrieveArticleData()
         }
 
         override fun onDestroy() {
