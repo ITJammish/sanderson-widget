@@ -98,9 +98,11 @@ internal fun getCustomProgressBarBitMap(
         strokeWidth = 10f
         textSize = (radiusPercentage * textSizeRatio).toFloat()
     }
+    val progressText = "$progress%"
+    val charCount = progressText.toCharArray().size
     canvas.drawText(
-        "$progress%",
-        (canvasCenter - (radiusPercentage * (textSizeRatio * 0.8))).toFloat(),
+        progressText,
+        (canvasCenter - (radiusPercentage * (textSizeRatio * (0.25 * charCount)))).toFloat(),
         (canvasCenter + (radiusPercentage * (textSizeRatio * 0.4))).toFloat(),
         textPaint
     )
