@@ -26,6 +26,24 @@
 
     <style name="Theme.SandersonWidget.AppWidgetContainer" parent="Theme.SandersonWidget.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">16dp</item>
+        <item name="appWidgetPadding">0dp</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.WayOfKings">
+        <item name="appWidgetBackgroundImage">@drawable/way_of_kings</item>
+        <item name="appWidgetTextColor">@android:color/white</item>
+        <item name="appWidgetProgressBarColor">@android:color/holo_red_dark</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.WordsOfRadiance">
+        <item name="appWidgetBackgroundImage">@drawable/words_of_radiance</item>
+        <item name="appWidgetTextColor">@android:color/white</item>
+        <item name="appWidgetProgressBarColor">@android:color/holo_blue_dark</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.OathBringer">
+        <item name="appWidgetBackgroundImage">@drawable/oath_bringer</item>
+        <item name="appWidgetTextColor">@android:color/white</item>
+        <item name="appWidgetProgressBarColor">@android:color/holo_orange_dark</item>
     </style>
 </resources>

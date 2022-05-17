@@ -1,14 +1,19 @@
 package com.itj.sandersonwidget.ui
 
+import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.os.Build
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
 
 /**
  * https://www.youtube.com/watch?v=MMiuy9jK6X8&list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K&index=4
@@ -26,6 +31,7 @@ class ProgressItemWidgetService : RemoteViewsService() {
         return ProgressItemWidgetFactory(applicationContext, intent)
     }
 
+    @SuppressLint("ResourceType")
     internal class ProgressItemWidgetFactory(
         private val context: Context,
         intent: Intent?,
@@ -33,7 +39,30 @@ class ProgressItemWidgetService : RemoteViewsService() {
 
         private val appWidgetId = intent?.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
         private val numberOfItems = intent?.getIntExtra(NUMBER_OF_ITEMS, USE_ALL_ITEMS) ?: USE_ALL_ITEMS
+        private val textColor: Int
+        private val progressColor: Int
+
         private lateinit var data: List<ProgressItem>
+
+        init {
+            val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                context.getColor(android.R.color.black)
+            } else {
+                context.resources.getColor(android.R.color.black)
+            }
+
+            val attrs = intArrayOf(R.attr.appWidgetTextColor)
+            val styledAttr =
+                context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings, attrs)
+            textColor = styledAttr.getColor(0, defaultColor)
+            styledAttr.recycle()
+
+            val attrs1 = intArrayOf(R.attr.appWidgetProgressBarColor)
+            val styledAttr1 =
+                context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings, attrs1)
+            progressColor = styledAttr1.getColor(0, defaultColor)
+            styledAttr1.recycle()
+        }
 
         override fun onCreate() {
             // connect to data source
@@ -74,8 +103,40 @@ class ProgressItemWidgetService : RemoteViewsService() {
 
             return RemoteViews(context.packageName, R.layout.item_view_progress).apply {
                 setTextViewText(R.id.item_title, data[imposedPosition].label)
+                setTextColor(R.id.item_title, textColor)
+
                 setProgressBar(R.id.item_progress_bar, 100, data[imposedPosition].progressPercentage.toInt(), false)
+                setProgressBarColor(this)
+
                 setTextViewText(R.id.item_percentage, "${data[imposedPosition].progressPercentage}%")
+                setTextColor(R.id.item_percentage, textColor)
+            }
+        }
+
+        private fun setProgressBarColor(
+            remoteViews: RemoteViews,
+        ) {
+            var setTintMethod: Method? = null
+            try {
+                setTintMethod =
+                    RemoteViews::class.java.getMethod(
+                        "setProgressTintList",
+                        Int::class.javaPrimitiveType,
+                        ColorStateList::class.java
+                    )
+            } catch (e: SecurityException) {
+                e.printStackTrace()
+            } catch (e: NoSuchMethodException) {
+                e.printStackTrace()
+            }
+            if (setTintMethod != null) {
+                try {
+                    setTintMethod.invoke(remoteViews, R.id.item_progress_bar, ColorStateList.valueOf(progressColor))
+                } catch (e: IllegalAccessException) {
+                    e.printStackTrace()
+                } catch (e: InvocationTargetException) {
+                    e.printStackTrace()
+                }
             }
         }
 

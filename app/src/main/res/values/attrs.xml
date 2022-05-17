@@ -3,5 +3,8 @@
         <attr name="appWidgetPadding" format="dimension" />
         <attr name="appWidgetInnerRadius" format="dimension" />
         <attr name="appWidgetRadius" format="dimension" />
+        <attr name="appWidgetBackgroundImage" format="reference" />
+        <attr name="appWidgetTextColor" format="color" />
+        <attr name="appWidgetProgressBarColor" format="color" />
     </declare-styleable>
 </resources>

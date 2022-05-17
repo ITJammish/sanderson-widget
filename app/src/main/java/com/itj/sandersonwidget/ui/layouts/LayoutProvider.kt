@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.*
 import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
@@ -40,6 +41,8 @@ class LayoutProvider {
         context: Context,
         appWidgetId: Int,
         gridSize: GridSize,
+        width: Int,
+        height: Int,
     ): RemoteViews {
         val articlesEnabled = SharedPreferencesStorage(context).retrieveArticlesEnabled()
         val progressItemData = SharedPreferencesStorage(context).retrieveProgressItemData()
@@ -59,7 +62,7 @@ class LayoutProvider {
                 is Large -> fetchMediumLargeView(context, progressItemData, appWidgetId, articlesEnabled)
             }
             is Large -> when (gridSize.height) {
-                is Small -> fetchLargeSmallView(context, progressItemData, appWidgetId)
+                is Small -> fetchLargeSmallView(context, progressItemData, appWidgetId, width, height)
                 is Medium -> fetchLargeMediumView(context, progressItemData, appWidgetId, articlesEnabled)
                 is Large -> fetchLargeLargeView(context, progressItemData, appWidgetId, articlesEnabled)
             }
@@ -146,11 +149,63 @@ class LayoutProvider {
         context: Context,
         progressItemData: List<ProgressItem>,
         appWidgetId: Int,
+        width: Int,
+        height: Int,
     ): RemoteViews {
         return RemoteViews(context.packageName, R.layout.view_large_small).apply {
             bindProgressItem(context, progressItemData[0], R.id.item_progress_indicator_1, R.id.item_title_1)
             bindProgressItem(context, progressItemData[1], R.id.item_progress_indicator_2, R.id.item_title_2)
             bindProgressItemList(context, appWidgetId, 2)
+
+            // todo after lunch:
+            // Either set up themes and save their int to prefs on settings option change
+
+            // also need to clean this up vv, for API level AND test on other widget sizes...
+
+            //Not needed for later API -> todo @API:setStyledBackgroundImage()
+            // or: getBackgroundDrawableId -> if(api>=31){}/else{}
+            // Calculate widget dimensions
+            val screenDensity = context.resources.displayMetrics.density
+            val widgetWidth = (screenDensity * width).toInt()
+            val widgetHeight = (screenDensity * height).toInt()
+
+            // Decode styled scaled background image
+            val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
+            // todo pull style id out of shared prefs/create a keymap for enum -> style that can be queried
+            val styledBackgroundAttrs = context.obtainStyledAttributes(
+                R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings,
+                backgroundAttrs
+            )
+            val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.oath_bringer)
+            styledBackgroundAttrs.recycle()
+
+            val options = BitmapFactory.Options().apply {
+                inMutable = true
+            }
+            val result = Bitmap.createBitmap(widgetWidth, widgetHeight, Bitmap.Config.ARGB_8888)
+            // todo get drawable id from user set style/theme attr
+            val rawBitmap = BitmapFactory.decodeResource(context.resources, backgroundResId, options)
+            val bitmap = Bitmap.createScaledBitmap(rawBitmap, widgetWidth, widgetHeight, true)
+            val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+            val paint = Paint().apply {
+                isAntiAlias = true
+                this.shader = shader
+            }
+
+            // Obtain corner radius from styles
+            val attrs = intArrayOf(R.attr.appWidgetRadius)
+            val styledAttr = context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer, attrs)
+            val radius = styledAttr.getDimension(0, 0f)
+            styledAttr.recycle()
+
+            // Cut background image corners and apply to image view
+            val rect = RectF(0.0f, 0.0f, widgetWidth.toFloat(), widgetHeight.toFloat())
+            Canvas(result).apply { drawRoundRect(rect, radius, radius, paint) }
+            setImageViewBitmap(R.id.widget_background_view, result)
+
+            // usable for higher APIs (31 etc)
+            // todo get drawable id from user set style/theme attr
+//            setImageViewResource(R.id.widget_backgroun_view, R.drawable.wayofkings)
         }
     }
 
@@ -207,13 +262,27 @@ class LayoutProvider {
         imageViewResId: Int,
         titleResId: Int
     ) {
+        val attrs = intArrayOf(R.attr.appWidgetProgressBarColor)
+        val styledAttr = context.obtainStyledAttributes(
+            R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings,
+            attrs,
+        )
+        val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getColor(android.R.color.black)
+        } else {
+            context.resources.getColor(android.R.color.black)
+        }
+        val progressColor = styledAttr.getColor(0, defaultColor)
+        styledAttr.recycle()
+
         setImageViewBitmap(
             imageViewResId, getCustomProgressBarBitMap(
                 context = context,
                 frameSize = 200,
                 outlineWidth = 6,
                 progressBarWidth = 30,
-                progress = progressItemData.progressPercentage.toInt()
+                progress = progressItemData.progressPercentage.toInt(),
+                progressColor = progressColor,
             )
         )
         setTextViewText(titleResId, progressItemData.label)
@@ -248,7 +317,7 @@ class LayoutProvider {
             action = ProgressBarsWidgetProvider.ACTION_ARTICLE_CLICK
         }
         // Todo extract method to handle SDK checks more cleanly
-        val clickArticlePendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val clickArticlePendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getBroadcast(context, 0, articleClickIntent, PendingIntent.FLAG_MUTABLE)
         } else {
             // Todo test with older Android versions
@@ -258,56 +327,5 @@ class LayoutProvider {
         setRemoteAdapter(R.id.article_stack, articleStackServiceIntent)
         setEmptyView(R.id.article_stack, R.id.article_stack_empty_view)
         setPendingIntentTemplate(R.id.article_stack, clickArticlePendingIntent)
-
-    }
-
-    @Deprecated(message = "Moving away from singular scalable layout.")
-    private fun oldViews(context: Context, appWidgetId: Int): RemoteViews {
-        // Construct the RemoteViews object
-        val views = RemoteViews(context.packageName, R.layout.widget_progress_bars)
-
-        // Create and set progress list item adapter intent
-        val progressItemServiceIntent = Intent(context, ProgressItemWidgetService::class.java).also {
-            it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            it.data = Uri.parse(it.toUri(Intent.URI_INTENT_SCHEME))
-        }
-        views.apply {
-            setRemoteAdapter(R.id.progress_item_list, progressItemServiceIntent)
-            setEmptyView(R.id.progress_item_list, R.id.progress_list_empty_view)
-        }
-
-        // Create and set article stack adapter intent
-        val articleStackServiceIntent = Intent(context, ArticleListWidgetService::class.java).also {
-            it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            it.data = Uri.parse(it.toUri(Intent.URI_INTENT_SCHEME))
-        }
-        val articleClickIntent = Intent(context, ProgressBarsWidgetProvider::class.java).apply {
-            action = ProgressBarsWidgetProvider.ACTION_ARTICLE_CLICK
-        }
-        // Todo extract method to handle SDK checks more cleanly
-        val clickArticlePendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.getBroadcast(context, 0, articleClickIntent, PendingIntent.FLAG_MUTABLE)
-        } else {
-            // Todo test with older Android versions
-            PendingIntent.getBroadcast(context, 0, articleClickIntent, 0)
-        }
-        views.apply {
-            setRemoteAdapter(R.id.article_stack, articleStackServiceIntent)
-            setEmptyView(R.id.article_stack, R.id.article_stack_empty_view)
-            setPendingIntentTemplate(R.id.article_stack, clickArticlePendingIntent)
-        }
-
-        // Spiked custom progress view
-        views.setImageViewBitmap(
-            R.id.test_image, getCustomProgressBarBitMap(
-                context = context,
-                frameSize = 400,
-                outlineWidth = 6,
-                progressBarWidth = 30,
-                progress = 29
-            )
-        )
-
-        return views
     }
 }
