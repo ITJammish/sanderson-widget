@@ -37,6 +37,10 @@ import com.itj.sandersonwidget.ui.getCustomProgressBarBitMap
  */
 class LayoutProvider {
 
+    // Todo duplicating default behaviour (also specified in SharedPrefs)
+    private var articlesEnabled = true
+    private var themeResId = R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+
     internal fun fetchLayout(
         context: Context,
         appWidgetId: Int,
@@ -44,7 +48,8 @@ class LayoutProvider {
         width: Int,
         height: Int,
     ): RemoteViews {
-        val articlesEnabled = SharedPreferencesStorage(context).retrieveArticlesEnabled()
+        articlesEnabled = SharedPreferencesStorage(context).retrieveArticlesEnabled()
+        themeResId = SharedPreferencesStorage(context).retrieveTheme()
         val progressItemData = SharedPreferencesStorage(context).retrieveProgressItemData()
         if (progressItemData.isEmpty()) {
             return RemoteViews(context.packageName, R.layout.view_loading)
@@ -58,13 +63,13 @@ class LayoutProvider {
             }
             is Medium -> when (gridSize.height) {
                 is Small -> fetchMediumSmallView(context, progressItemData, appWidgetId)
-                is Medium -> fetchMediumMediumView(context, progressItemData, appWidgetId, articlesEnabled)
-                is Large -> fetchMediumLargeView(context, progressItemData, appWidgetId, articlesEnabled)
+                is Medium -> fetchMediumMediumView(context, progressItemData, appWidgetId)
+                is Large -> fetchMediumLargeView(context, progressItemData, appWidgetId)
             }
             is Large -> when (gridSize.height) {
                 is Small -> fetchLargeSmallView(context, progressItemData, appWidgetId, width, height)
-                is Medium -> fetchLargeMediumView(context, progressItemData, appWidgetId, articlesEnabled)
-                is Large -> fetchLargeLargeView(context, progressItemData, appWidgetId, articlesEnabled)
+                is Medium -> fetchLargeMediumView(context, progressItemData, appWidgetId)
+                is Large -> fetchLargeLargeView(context, progressItemData, appWidgetId)
             }
         }
 //        return oldViews(context, appWidgetId)
@@ -115,7 +120,6 @@ class LayoutProvider {
         context: Context,
         progressItemData: List<ProgressItem>,
         appWidgetId: Int,
-        articlesEnabled: Boolean
     ): RemoteViews {
         return if (articlesEnabled) {
             RemoteViews(context.packageName, R.layout.view_medium_medium_with_articles).apply {
@@ -132,7 +136,6 @@ class LayoutProvider {
         context: Context,
         progressItemData: List<ProgressItem>,
         appWidgetId: Int,
-        articlesEnabled: Boolean
     ): RemoteViews {
         return if (articlesEnabled) {
             RemoteViews(context.packageName, R.layout.view_medium_medium_with_articles).apply {
@@ -173,10 +176,10 @@ class LayoutProvider {
             val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
             // todo pull style id out of shared prefs/create a keymap for enum -> style that can be queried
             val styledBackgroundAttrs = context.obtainStyledAttributes(
-                R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings,
+                themeResId,
                 backgroundAttrs
             )
-            val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.oath_bringer)
+            val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.oathbringer)
             styledBackgroundAttrs.recycle()
 
             val options = BitmapFactory.Options().apply {
@@ -213,7 +216,6 @@ class LayoutProvider {
         context: Context,
         progressItemData: List<ProgressItem>,
         appWidgetId: Int,
-        articlesEnabled: Boolean
     ): RemoteViews {
         return if (articlesEnabled) {
             RemoteViews(context.packageName, R.layout.view_large_medium_with_articles).apply {
@@ -231,7 +233,6 @@ class LayoutProvider {
         context: Context,
         progressItemData: List<ProgressItem>,
         appWidgetId: Int,
-        articlesEnabled: Boolean
     ): RemoteViews {
         return if (articlesEnabled) {
             RemoteViews(context.packageName, R.layout.view_large_medium_with_articles).apply {
@@ -264,7 +265,7 @@ class LayoutProvider {
     ) {
         val attrs = intArrayOf(R.attr.appWidgetProgressBarColor)
         val styledAttr = context.obtainStyledAttributes(
-            R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings,
+            themeResId,
             attrs,
         )
         val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

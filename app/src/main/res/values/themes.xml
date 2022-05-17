@@ -41,8 +41,8 @@
         <item name="appWidgetProgressBarColor">@android:color/holo_blue_dark</item>
     </style>
 
-    <style name="Theme.SandersonWidget.AppWidgetContainer.OathBringer">
-        <item name="appWidgetBackgroundImage">@drawable/oath_bringer</item>
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Oathbringer">
+        <item name="appWidgetBackgroundImage">@drawable/oathbringer</item>
         <item name="appWidgetTextColor">@android:color/white</item>
         <item name="appWidgetProgressBarColor">@android:color/holo_orange_dark</item>
     </style>

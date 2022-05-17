@@ -45,6 +45,7 @@ class ProgressItemWidgetService : RemoteViewsService() {
         private lateinit var data: List<ProgressItem>
 
         init {
+            val themeResId = SharedPreferencesStorage(context).retrieveTheme()
             val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 context.getColor(android.R.color.black)
             } else {
@@ -53,13 +54,13 @@ class ProgressItemWidgetService : RemoteViewsService() {
 
             val attrs = intArrayOf(R.attr.appWidgetTextColor)
             val styledAttr =
-                context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings, attrs)
+                context.obtainStyledAttributes(themeResId, attrs)
             textColor = styledAttr.getColor(0, defaultColor)
             styledAttr.recycle()
 
             val attrs1 = intArrayOf(R.attr.appWidgetProgressBarColor)
             val styledAttr1 =
-                context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings, attrs1)
+                context.obtainStyledAttributes(themeResId, attrs1)
             progressColor = styledAttr1.getColor(0, defaultColor)
             styledAttr1.recycle()
         }

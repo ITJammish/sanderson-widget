@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
@@ -45,6 +47,22 @@ class ProgressBarsConfigureActivity : Activity() {
         setResult(RESULT_OK, resultValue)
         finish()
     }
+    // Todo make matching nicer than hardcoded and error prone Strings
+    private var onThemeSpinnerItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            val chosenTheme = when(parent?.getItemAtPosition(position)) {
+                "Way of Kings" -> R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+                "Words of Radiance" -> R.style.Theme_SandersonWidget_AppWidgetContainer_WordsOfRadiance
+                "Oathbringer" -> R.style.Theme_SandersonWidget_AppWidgetContainer_Oathbringer
+                else -> R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+            }
+            sharedPreferences.storeTheme(chosenTheme)
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            // Do nothing
+        }
+    }
     private lateinit var binding: ActivityProgressBarsConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
@@ -59,6 +77,16 @@ class ProgressBarsConfigureActivity : Activity() {
         setContentView(binding.root)
 
         binding.addButton.setOnClickListener(onClickListener)
+        with(binding.themeSpinner) {
+            adapter = ArrayAdapter.createFromResource(
+                this@ProgressBarsConfigureActivity,
+                R.array.themes_array,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            onItemSelectedListener = onThemeSpinnerItemSelectedListener
+        }
 
         // Find the widget id from the intent.
         val intent = intent
