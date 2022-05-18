@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- todo unify styles for widget/views -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.SandersonWidget.AppWidget.Container"
@@ -7,68 +6,58 @@
     android:layout_height="match_parent"
     android:theme="@style/Theme.SandersonWidget.AppWidgetContainer">
 
-    <ImageView
-        android:id="@+id/widget_background_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:src="@drawable/way_of_kings" />
+    <include layout="@layout/include_widget_background_view" />
 
     <LinearLayout
+        style="@style/WidgetContentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:padding="12dp"
         android:weightSum="4"
         tools:ignore="UseCompoundDrawables">
 
         <LinearLayout
             android:id="@+id/item_1"
+            style="@style/ProgressWheelContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/background_progress_view"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/item_progress_indicator_1"
+                style="@style/ProgressWheelIndicator"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="30dp"
-                android:minHeight="30dp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/item_title_1"
+                style="@style/ProgressWheelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 tools:text="Project 1" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/item_2"
+            style="@style/ProgressWheelContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/background_progress_view"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/item_progress_indicator_2"
+                style="@style/ProgressWheelIndicator"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="30dp"
-                android:minHeight="30dp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/item_title_2"
+                style="@style/ProgressWheelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 tools:text="Project 2" />
         </LinearLayout>
 
@@ -84,16 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/progress_list_empty_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/darker_gray"
-                android:gravity="center"
-                android:text="Empty"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <include layout="@layout/include_view_progress_list_empty" />
         </FrameLayout>
     </LinearLayout>
 </FrameLayout>
