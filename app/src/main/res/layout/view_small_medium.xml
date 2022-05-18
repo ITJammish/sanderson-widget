@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />
 
-            <include layout="@layout/include_view_progress_list_empty" />
+            <include layout="@layout/include_progress_list_empty_view" />
         </FrameLayout>
     </LinearLayout>
 </FrameLayout>

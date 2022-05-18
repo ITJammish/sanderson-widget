@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <include layout="@layout/include_view_progress_list_empty" />
+            <include layout="@layout/include_progress_list_empty_view" />
         </FrameLayout>
     </LinearLayout>
 </FrameLayout>

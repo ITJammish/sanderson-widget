@@ -142,6 +142,7 @@ class LayoutProvider {
                 bindProgressItem(context, progressItemData[0], R.id.item_progress_indicator_1, R.id.item_title_1)
                 bindProgressItemList(context, appWidgetId, 3)
                 bindArticleStack(context, appWidgetId)
+                bindStyledBackgroundCompat(context, width, height)
             }
         } else {
             fetchFourByFourView(context, progressItemData, width, height)
@@ -160,6 +161,7 @@ class LayoutProvider {
                 bindProgressItem(context, progressItemData[0], R.id.item_progress_indicator_1, R.id.item_title_1)
                 bindProgressItemList(context, appWidgetId, 3)
                 bindArticleStack(context, appWidgetId)
+                bindStyledBackgroundCompat(context, width, height)
             }
         } else {
             fetchFourByFourView(context, progressItemData, width, height)
@@ -194,6 +196,7 @@ class LayoutProvider {
                 bindProgressItem(context, progressItemData[1], R.id.item_progress_indicator_2, R.id.item_title_2)
                 bindProgressItemList(context, appWidgetId, 2)
                 bindArticleStack(context, appWidgetId)
+                bindStyledBackgroundCompat(context, width, height)
             }
         } else {
             fetchFourByFourView(context, progressItemData, width, height)
@@ -213,6 +216,7 @@ class LayoutProvider {
                 bindProgressItem(context, progressItemData[1], R.id.item_progress_indicator_2, R.id.item_title_2)
                 bindProgressItemList(context, appWidgetId, 2)
                 bindArticleStack(context, appWidgetId)
+                bindStyledBackgroundCompat(context, width, height)
             }
         } else {
             fetchFourByFourView(context, progressItemData, width, height)
