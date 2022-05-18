@@ -12,12 +12,13 @@ import com.itj.sandersonwidget.ProgressBarsWidgetProvider
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
-import com.itj.sandersonwidget.ui.ArticleListWidgetService
 import com.itj.sandersonwidget.ui.DimensionSize.*
 import com.itj.sandersonwidget.ui.GridSize
-import com.itj.sandersonwidget.ui.ProgressItemWidgetService
-import com.itj.sandersonwidget.ui.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
+import com.itj.sandersonwidget.ui.fetchThemeColors
 import com.itj.sandersonwidget.ui.getCustomProgressBarBitMap
+import com.itj.sandersonwidget.ui.service.ArticleListWidgetService
+import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService
+import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
 
 // todo for api>=31
 //    val smallView = RemoteViews(context.packageName, R.layout.view_small)
@@ -246,18 +247,7 @@ class LayoutProvider {
         imageViewResId: Int,
         titleResId: Int
     ) {
-        val attrs = intArrayOf(R.attr.appWidgetProgressBarColor)
-        val styledAttr = context.obtainStyledAttributes(
-            themeResId,
-            attrs,
-        )
-        val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getColor(android.R.color.black)
-        } else {
-            context.resources.getColor(android.R.color.black)
-        }
-        val progressColor = styledAttr.getColor(0, defaultColor)
-        styledAttr.recycle()
+        val themeColors = fetchThemeColors(context, themeResId)
 
         setImageViewBitmap(
             imageViewResId, getCustomProgressBarBitMap(
@@ -266,10 +256,12 @@ class LayoutProvider {
                 outlineWidth = 6,
                 progressBarWidth = 30,
                 progress = progressItemData.progressPercentage.toInt(),
-                progressColor = progressColor,
+                progressColor = themeColors.progressColor,
             )
         )
+
         setTextViewText(titleResId, progressItemData.label)
+        setTextColor(titleResId, themeColors.textColor)
     }
 
     private fun RemoteViews.bindProgressItemList(

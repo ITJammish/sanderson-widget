@@ -1,4 +1,4 @@
-package com.itj.sandersonwidget.ui
+package com.itj.sandersonwidget.ui.service
 
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
