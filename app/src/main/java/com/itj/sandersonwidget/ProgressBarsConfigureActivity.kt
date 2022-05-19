@@ -47,10 +47,11 @@ class ProgressBarsConfigureActivity : Activity() {
         setResult(RESULT_OK, resultValue)
         finish()
     }
+
     // Todo make matching nicer than hardcoded and error prone Strings
     private var onThemeSpinnerItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            val chosenTheme = when(parent?.getItemAtPosition(position)) {
+            val chosenTheme = when (parent?.getItemAtPosition(position)) {
                 "Way of Kings" -> R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
                 "Words of Radiance" -> R.style.Theme_SandersonWidget_AppWidgetContainer_WordsOfRadiance
                 "Oathbringer" -> R.style.Theme_SandersonWidget_AppWidgetContainer_Oathbringer
