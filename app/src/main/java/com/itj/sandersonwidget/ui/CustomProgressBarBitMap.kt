@@ -6,21 +6,13 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.core.content.res.ResourcesCompat
 
-/**
- * TODO - Designs
- *  https://developer.android.com/codelabs/advanced-android-kotlin-training-canvas - Train to use Canvas
- *  Create class for drawing progress bars
- *  Map out widget layouts for different supported grid sizes
- *  https://cdn.discordapp.com/attachments/205725308962209792/966649896067289118/20220421_114131.jpg
- *
- *  Then eventually styling/theming
- */
 internal fun getCustomProgressBarBitMap(
     context: Context,
     frameSize: Int,
     outlineWidth: Int,
     progressBarWidth: Int,
-    progress: Int
+    progress: Int,
+    progressColor: Int,
 ): Bitmap {
     val radiusPercentage = frameSize / 200
     val canvasCenter = (frameSize / 2)
@@ -56,7 +48,6 @@ internal fun getCustomProgressBarBitMap(
         progressNegativeCirclePaint
     )
 
-    val progressColor = ResourcesCompat.getColor(context.resources, android.R.color.holo_blue_bright, null)
     val progressPaint = Paint().apply {
         color = progressColor
         strokeWidth = 10f

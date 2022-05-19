@@ -2,6 +2,7 @@ package com.itj.sandersonwidget.domain.storage
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
 
@@ -12,6 +13,7 @@ class SharedPreferencesStorage(context: Context) : Storage {
         internal const val PROJECT_ITEMS = "progress_items"
         internal const val ARTICLES = "articles"
         internal const val PREF_ARTICLES_ENABLED = "pref_articles_enabled"
+        internal const val PREF_THEME_ID = "PREF_THEME_ID"
 
         internal const val DELIMITER = "DELIMITER"
     }
@@ -75,5 +77,16 @@ class SharedPreferencesStorage(context: Context) : Storage {
 
     override fun retrieveArticlesEnabled(): Boolean {
         return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED, true)
+    }
+
+    override fun storeTheme(themeResId: Int) {
+        with(sharedPreferences.edit()) {
+            putInt(PREF_THEME_ID, themeResId)
+            apply()
+        }
+    }
+
+    override fun retrieveTheme(): Int {
+        return sharedPreferences.getInt(PREF_THEME_ID, R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings)
     }
 }

@@ -19,4 +19,8 @@ interface Storage {
     fun storeArticlesEnabled(articlesEnabled: Boolean)
 
     fun retrieveArticlesEnabled(): Boolean
+
+    fun storeTheme(themeResId: Int)
+
+    fun retrieveTheme(): Int
 }

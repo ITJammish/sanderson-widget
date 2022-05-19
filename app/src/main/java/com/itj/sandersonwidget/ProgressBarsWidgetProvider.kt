@@ -13,8 +13,8 @@ import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.network.WebScraperWorker
 import com.itj.sandersonwidget.ui.DimensionSize.Small
 import com.itj.sandersonwidget.ui.GridSize
-import com.itj.sandersonwidget.ui.layouts.LayoutProvider
 import com.itj.sandersonwidget.ui.getGridSizePortrait
+import com.itj.sandersonwidget.ui.layouts.LayoutProvider
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,7 +44,7 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
 //        for (appWidgetId in appWidgetIds) {
-            // todo this is broken and removing data before it can be used
+        // todo this is broken and removing data before it can be used
 //            SharedPreferencesStorage(context).clearAll()
 //        }
     }
@@ -98,7 +98,8 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
             val newMaxHeight = it.get(OPTION_APPWIDGET_MAX_HEIGHT) as Int? ?: -1
             val gridSize = getGridSizePortrait(newMinWidth, newMinHeight, newMaxHeight)
             if (newMinWidth != -1 && newMinWidth != -1) {
-                updateAppWidget(context, appWidgetManager, appWidgetId, gridSize)
+                // todo could need maxWidth/minHeight for portrait mode
+                updateAppWidget(context, appWidgetManager, appWidgetId, gridSize, newMinWidth, newMaxHeight)
             }
         }
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
@@ -110,8 +111,10 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int,
     gridSize: GridSize = GridSize(Small, Small),
+    width: Int = 50,
+    height: Int = 50,
 ) {
-    val views = LayoutProvider().fetchLayout(context, appWidgetId, gridSize)
+    val views = LayoutProvider().fetchLayout(context, appWidgetId, gridSize, width, height)
 
     // Instruct the widget manager to update the widget
     with(appWidgetManager) {

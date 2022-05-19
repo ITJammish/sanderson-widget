@@ -9,4 +9,25 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="BookCoverBackground" />
+
+    <style name="WidgetContentContainer">
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="ProgressWheelContainer">
+        <item name="android:padding">4dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/background_progress_view</item>
+    </style>
+
+    <style name="ProgressWheelIndicator">
+        <item name="android:minWidth">30dp</item>
+        <item name="android:minHeight">30dp</item>
+    </style>
+
+    <style name="ProgressWheelTitle">
+        <item name="android:gravity">center_horizontal</item>
+    </style>
 </resources>
