@@ -11,9 +11,9 @@ import android.util.Log
 import androidx.work.*
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.network.WebScraperWorker
-import com.itj.sandersonwidget.ui.DimensionSize.Small
-import com.itj.sandersonwidget.ui.GridSize
-import com.itj.sandersonwidget.ui.getGridSizePortrait
+import com.itj.sandersonwidget.ui.helper.DimensionSize.Small
+import com.itj.sandersonwidget.ui.helper.GridSize
+import com.itj.sandersonwidget.ui.helper.getGridSizePortrait
 import com.itj.sandersonwidget.ui.layouts.LayoutProvider
 import java.util.concurrent.TimeUnit
 

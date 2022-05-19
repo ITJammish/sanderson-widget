@@ -1,4 +1,4 @@
-package com.itj.sandersonwidget.ui
+package com.itj.sandersonwidget.ui.helper
 
 /**
  * https://developer.android.com/guide/topics/appwidgets/layouts

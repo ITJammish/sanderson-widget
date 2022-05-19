@@ -13,4 +13,5 @@
     <color name="light_blue_900">#FF01579B</color>
 
     <color name="transparent_black">#80000000</color>
+    <color name="translucent_black">#4D000000</color>
 </resources>

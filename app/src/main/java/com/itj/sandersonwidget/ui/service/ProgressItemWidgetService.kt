@@ -12,8 +12,8 @@ import android.widget.RemoteViewsService
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
-import com.itj.sandersonwidget.ui.ThemeColors
-import com.itj.sandersonwidget.ui.fetchThemeColors
+import com.itj.sandersonwidget.ui.helper.ThemeColors
+import com.itj.sandersonwidget.ui.helper.fetchThemeColors
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 

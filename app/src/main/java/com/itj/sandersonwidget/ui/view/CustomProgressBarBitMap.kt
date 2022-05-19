@@ -1,10 +1,11 @@
-package com.itj.sandersonwidget.ui
+package com.itj.sandersonwidget.ui.view
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat.getColor
+import com.itj.sandersonwidget.R
 
 internal fun getCustomProgressBarBitMap(
     context: Context,
@@ -17,14 +18,17 @@ internal fun getCustomProgressBarBitMap(
     val radiusPercentage = frameSize / 200
     val canvasCenter = (frameSize / 2)
 
-    val backgroundColor = ResourcesCompat.getColor(context.resources, android.R.color.transparent, null)
+    val backgroundColor = getColor(context.resources, android.R.color.transparent, null)
+    val progressNegativeCircleColor = getColor(context.resources, R.color.transparent_black, null)
+    val topCircleColor = getColor(context.resources, R.color.translucent_black, null)
+    val textColor = getColor(context.resources, android.R.color.white, null)
+
     val bitMap = Bitmap.createBitmap(frameSize, frameSize, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitMap)
     canvas.drawColor(backgroundColor)
 
-    val outlineCircleColor = ResourcesCompat.getColor(context.resources, android.R.color.black, null)
     val outLineCirclePaint = Paint().apply {
-        color = outlineCircleColor
+        color = progressColor // here
         strokeWidth = 10f
         isAntiAlias = true
     }
@@ -35,7 +39,6 @@ internal fun getCustomProgressBarBitMap(
         outLineCirclePaint
     )
 
-    val progressNegativeCircleColor = ResourcesCompat.getColor(context.resources, android.R.color.white, null)
     val progressNegativeCirclePaint = Paint().apply {
         color = progressNegativeCircleColor
         strokeWidth = 10f
@@ -69,7 +72,6 @@ internal fun getCustomProgressBarBitMap(
         outLineCirclePaint
     )
 
-    val topCircleColor = ResourcesCompat.getColor(context.resources, android.R.color.white, null)
     val topCirclePaint = Paint().apply {
         color = topCircleColor
         strokeWidth = 10f
@@ -83,7 +85,6 @@ internal fun getCustomProgressBarBitMap(
     )
 
     val textSizeRatio = 50
-    val textColor = ResourcesCompat.getColor(context.resources, android.R.color.black, null)
     val textPaint = Paint().apply {
         color = textColor
         strokeWidth = 10f

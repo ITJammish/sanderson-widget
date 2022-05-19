@@ -12,13 +12,13 @@ import com.itj.sandersonwidget.ProgressBarsWidgetProvider
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
-import com.itj.sandersonwidget.ui.DimensionSize.*
-import com.itj.sandersonwidget.ui.GridSize
-import com.itj.sandersonwidget.ui.fetchThemeColors
-import com.itj.sandersonwidget.ui.getCustomProgressBarBitMap
+import com.itj.sandersonwidget.ui.helper.DimensionSize.*
+import com.itj.sandersonwidget.ui.helper.GridSize
+import com.itj.sandersonwidget.ui.helper.fetchThemeColors
 import com.itj.sandersonwidget.ui.service.ArticleListWidgetService
 import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService
 import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
+import com.itj.sandersonwidget.ui.view.getCustomProgressBarBitMap
 
 // todo for api>=31
 //    val smallView = RemoteViews(context.packageName, R.layout.view_small)

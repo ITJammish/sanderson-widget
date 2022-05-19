@@ -1,4 +1,4 @@
-package com.itj.sandersonwidget.ui
+package com.itj.sandersonwidget.ui.helper
 
 import android.content.Context
 import android.os.Build
