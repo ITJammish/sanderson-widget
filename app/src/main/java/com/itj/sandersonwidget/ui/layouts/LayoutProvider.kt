@@ -20,19 +20,6 @@ import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService
 import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
 import com.itj.sandersonwidget.ui.view.getCustomProgressBarBitMap
 
-// todo for api>=31
-//    val smallView = RemoteViews(context.packageName, R.layout.view_small)
-//    val mediumView = RemoteViews(context.packageName, R.layout.view_medium)
-//    val largeView = RemoteViews(context.packageName, R.layout.view_large)
-//
-//    val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-//        SizeF(150f, 100f) to smallView,
-//        SizeF(150f, 200f) to mediumView,
-//        SizeF(215f, 100f) to largeView,
-//    )
-//
-//    val remoteViews = RemoteViews(viewMapping)
-//    appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
 /**
  * https://developer.android.com/guide/topics/appwidgets/layouts
  */
