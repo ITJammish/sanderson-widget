@@ -1,12 +1,14 @@
 package com.itj.sandersonwidget
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
@@ -14,58 +16,25 @@ import com.itj.sandersonwidget.ui.helper.Theme.*
 
 /**
  * The configuration screen for the [ProgressBarsWidgetProvider] AppWidget.
- *
- * Keeping up with Brandon
- *
- * Toggles:
- * - Show progress bars
- * - Show articles
- * - Receive notifications for:
- *      - Progress updates
- *      - New articles
- *
- * Styles:
- * - Themes/backgrounds from major book series?
  */
-class ProgressBarsConfigureActivity : Activity() {
+class ProgressBarsConfigureActivity : AppCompatActivity() {
+
+    companion object {
+        private const val NO_THEME_CHOSEN = "no_theme_chosen"
+    }
+
     private lateinit var sharedPreferences: Storage
+    private lateinit var binding: ActivityProgressBarsConfigureBinding
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private var onClickListener = View.OnClickListener {
-        val context = this@ProgressBarsConfigureActivity
-
-        // When the button is clicked, store the prefs locally
-        val articlesEnabled = binding.articleSwitch.isChecked
-        sharedPreferences.storeArticlesEnabled(appWidgetId, articlesEnabled)
-
-        // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
-
-        // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_OK, resultValue)
-        finish()
-    }
-
+    private var chosenThemeLabel: String = NO_THEME_CHOSEN
     private var onThemeSpinnerItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            // User visible values defined in <string-array name="themes_array">
-            val chosenTheme = when (parent?.getItemAtPosition(position)) {
-                "Way of Kings" -> WayOfKings
-                "Words of Radiance" -> WordsOfRadiance
-                "Oathbringer" -> Oathbringer
-                else -> WayOfKings
-            }
-            sharedPreferences.storeTheme(appWidgetId, chosenTheme.id)
+            chosenThemeLabel = parent?.getItemAtPosition(position) as String? ?: NO_THEME_CHOSEN
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            // Do nothing
-        }
+        override fun onNothingSelected(parent: AdapterView<*>?) {} // Do nothing
     }
-    private lateinit var binding: ActivityProgressBarsConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -78,20 +47,24 @@ class ProgressBarsConfigureActivity : Activity() {
         binding = ActivityProgressBarsConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.addButton.setOnClickListener(onClickListener)
-        with(binding.themeSpinner) {
-            adapter = ArrayAdapter.createFromResource(
-                this@ProgressBarsConfigureActivity,
-                R.array.themes_array,
-                android.R.layout.simple_spinner_item
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-            onItemSelectedListener = onThemeSpinnerItemSelectedListener
-        }
+        setAppWidgetId()
+        bindViews()
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_activity_configuration, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_item_add_widget -> onAddWidgetClick()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setAppWidgetId() {
         // Find the widget id from the intent.
-        val intent = intent
         val extras = intent.extras
         if (extras != null) {
             appWidgetId = extras.getInt(
@@ -104,7 +77,51 @@ class ProgressBarsConfigureActivity : Activity() {
             finish()
             return
         }
+    }
 
+    private fun bindViews() {
         binding.articleSwitch.isChecked = sharedPreferences.retrieveArticlesEnabled(appWidgetId)
+
+        with(binding.themeSpinner) {
+            adapter = ArrayAdapter.createFromResource(
+                this@ProgressBarsConfigureActivity,
+                R.array.themes_array,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            onItemSelectedListener = onThemeSpinnerItemSelectedListener
+        }
+    }
+
+    private fun onAddWidgetClick() {
+        val context = this@ProgressBarsConfigureActivity
+
+        // When the button is clicked, store the prefs locally
+        // Store article preference
+        val articlesEnabled = binding.articleSwitch.isChecked
+        sharedPreferences.storeArticlesEnabled(appWidgetId, articlesEnabled)
+
+        // Store chosen theme
+        if (chosenThemeLabel != NO_THEME_CHOSEN) {
+            // User visible values defined in <string-array name="themes_array">
+            val chosenTheme = when (chosenThemeLabel) {
+                "Way of Kings" -> WayOfKings
+                "Words of Radiance" -> WordsOfRadiance
+                "Oathbringer" -> Oathbringer
+                else -> WayOfKings
+            }
+            sharedPreferences.storeTheme(appWidgetId, chosenTheme.id)
+        }
+
+        // It is the responsibility of the configuration activity to update the app widget
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        updateAppWidget(context, appWidgetManager, appWidgetId)
+
+        // Make sure we pass back the original appWidgetId
+        val resultValue = Intent()
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(RESULT_OK, resultValue)
+        finish()
     }
 }
