@@ -33,7 +33,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
         private const val INVALID_WIDGET_DIMENSION = -1
     }
 
-//    private val widgetViewMap: MutableMap<Int, Pair<RemoteViews, RemoteViews>> = mutableMapOf()
     private var appWidgetManager: AppWidgetManager? = null
 
     override fun onUpdate(
@@ -54,12 +53,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
 //        for (appWidgetId in appWidgetIds) {
         // todo this is broken and removing data before it can be used
 //            SharedPreferencesStorage(context).clearAll()
-//        }
-//        for (appWidgetId in appWidgetIds) {
-//            widgetViewMap.remove(appWidgetId)
-//        }
-//        if (widgetViewMap.isEmpty()) {
-//            appWidgetManager = null
 //        }
     }
 
@@ -83,13 +76,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
             ACTION_ARTICLE_CLICK -> handleArticleClick(context, intent)
-            /**
-             * We can't monitor this intent action from AppWidgetProvider, and introducing a regular Broadcast Receiver
-             * is not advised. It's suggested that Launcher applications should be responsible for triggering
-             * configuration changes in widget:
-             * https://stackoverflow.com/questions/2435548/how-to-detect-orientation-change-in-home-screen-widget#:~:text=Since%20Android%20API%2016%2C%20there,min%2Fmax%20width%2Fheight.&text=When%20this%20is%20called%2C%20one,have%20to%20get%20orientation%20information.
-             */
-//            ACTION_CONFIGURATION_CHANGED -> handleConfigurationChange(context)
         }
 
         super.onReceive(context, intent)
@@ -112,7 +98,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
             if (minWidth != INVALID_WIDGET_DIMENSION) {
                 val portraitLayout = LayoutProvider().fetchLayout(context, appWidgetId, gridSize, minWidth, maxHeight)
                 val landscapeLayout = LayoutProvider().fetchLayout(context, appWidgetId, gridSize, maxWidth, minHeight)
-//                widgetViewMap[appWidgetId] = Pair(portraitLayout, landscapeLayout)
 
                 val orientation = context.resources.configuration.orientation
                 if (orientation == ORIENTATION_PORTRAIT) {
@@ -138,23 +123,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
             }
         }
     }
-
-//    private fun handleConfigurationChange(context: Context?) {
-//        context?.let {
-//            val orientation = it.resources.configuration.orientation
-//            appWidgetManager?.let { appWidgetManager ->
-//                for (appWidgetId in widgetViewMap.keys) {
-//                    if (orientation == ORIENTATION_PORTRAIT) {
-//                        widgetViewMap[appWidgetId]?.first
-//                    } else {
-//                        widgetViewMap[appWidgetId]?.second
-//                    }?.let { views ->
-//                        updateAppWidget(appWidgetManager, appWidgetId, views)
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 internal fun updateAppWidget(
