@@ -36,8 +36,8 @@ class LayoutProvider {
         width: Int,
         height: Int,
     ): RemoteViews {
-        articlesEnabled = SharedPreferencesStorage(context).retrieveArticlesEnabled()
-        themeResId = SharedPreferencesStorage(context).retrieveTheme()
+        articlesEnabled = SharedPreferencesStorage(context).retrieveArticlesEnabled(appWidgetId)
+        themeResId = SharedPreferencesStorage(context).retrieveTheme(appWidgetId)
         val progressItemData = SharedPreferencesStorage(context).retrieveProgressItemData()
         if (progressItemData.isEmpty()) {
             return RemoteViews(context.packageName, R.layout.view_loading)

@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_CONFIGURATION_CHANGED
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
 import android.os.Bundle
@@ -40,7 +39,9 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        Log.d("JamesDebug:", "onUpdate with ${appWidgetIds[0]}")
+        for (appWidgetId in appWidgetIds) {
+            Log.d("JamesDebug:", "onUpdate with $appWidgetId")
+        }
         this.appWidgetManager = appWidgetManager
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
@@ -50,17 +51,13 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
-//        for (appWidgetId in appWidgetIds) {
-        // todo this is broken and removing data before it can be used
-//            SharedPreferencesStorage(context).clearAll()
-//        }
+        for (appWidgetId in appWidgetIds) {
+            Log.d("JamesDebug:", "onDeleted $appWidgetId")
+            SharedPreferencesStorage(context).clearForAppWidgetId(appWidgetId)
+        }
     }
 
     override fun onEnabled(context: Context) {
-        // TODO if multiple widgets placed we'll have duplicate Work... any way to make this nicer?
-        //  Probably should save data against sharedPref key+widgetId, and clean this up when onDisabled
-        //  That way, while we have duplicate datasets, we aren't spinning up multiple Work and overwriting
-        //  the same data.
         // Enter relevant functionality for when the first widget is created
         startWorkRequest(context)
         Log.d("JamesDebug:", "onEnabled")
@@ -68,9 +65,9 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
-        cancelWorkRequest(context)
-        // todo clear shared prefs data?
         Log.d("JamesDebug:", "onDisabled")
+        cancelWorkRequest(context)
+//        SharedPreferencesStorage(context).clearAll() // todo re-enable when we turn the network calls back on
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {

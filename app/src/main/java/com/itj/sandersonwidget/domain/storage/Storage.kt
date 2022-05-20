@@ -8,6 +8,8 @@ interface Storage {
 
     fun clearAll()
 
+    fun clearForAppWidgetId(appWidgetId: Int)
+
     fun storeProgressItemData(items: List<ProgressItem>)
 
     fun retrieveProgressItemData(): List<ProgressItem>
@@ -16,11 +18,11 @@ interface Storage {
 
     fun retrieveArticleData(): List<Article>
 
-    fun storeArticlesEnabled(articlesEnabled: Boolean)
+    fun storeArticlesEnabled(appWidgetId: Int, articlesEnabled: Boolean)
 
-    fun retrieveArticlesEnabled(): Boolean
+    fun retrieveArticlesEnabled(appWidgetId: Int): Boolean
 
-    fun storeTheme(themeResId: Int)
+    fun storeTheme(appWidgetId: Int, themeResId: Int)
 
-    fun retrieveTheme(): Int
+    fun retrieveTheme(appWidgetId: Int): Int
 }

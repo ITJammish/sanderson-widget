@@ -35,7 +35,7 @@ class ProgressBarsConfigureActivity : Activity() {
 
         // When the button is clicked, store the prefs locally
         val articlesEnabled = binding.articleSwitch.isChecked
-        sharedPreferences.storeArticlesEnabled(articlesEnabled)
+        sharedPreferences.storeArticlesEnabled(appWidgetId, articlesEnabled)
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -57,7 +57,7 @@ class ProgressBarsConfigureActivity : Activity() {
                 "Oathbringer" -> R.style.Theme_SandersonWidget_AppWidgetContainer_Oathbringer
                 else -> R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
             }
-            sharedPreferences.storeTheme(chosenTheme)
+            sharedPreferences.storeTheme(appWidgetId, chosenTheme)
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -104,6 +104,6 @@ class ProgressBarsConfigureActivity : Activity() {
             return
         }
 
-        binding.articleSwitch.isChecked = sharedPreferences.retrieveArticlesEnabled()
+        binding.articleSwitch.isChecked = sharedPreferences.retrieveArticlesEnabled(appWidgetId)
     }
 }

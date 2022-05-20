@@ -20,11 +20,17 @@ class SharedPreferencesStorage(context: Context) : Storage {
 
     private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
-    // Clear widget specific data: currently there is no per-widget data stored todo!
     override fun clearAll() {
         sharedPreferences.edit()
             .remove(PROJECT_ITEMS)
             .remove(ARTICLES)
+            .apply()
+    }
+
+    override fun clearForAppWidgetId(appWidgetId: Int) {
+        sharedPreferences.edit()
+            .remove(PREF_ARTICLES_ENABLED + appWidgetId)
+            .remove(PREF_THEME_ID + appWidgetId)
             .apply()
     }
 
@@ -68,25 +74,28 @@ class SharedPreferencesStorage(context: Context) : Storage {
     }
 
     // Widget Preferences
-    override fun storeArticlesEnabled(articlesEnabled: Boolean) {
+    override fun storeArticlesEnabled(appWidgetId: Int, articlesEnabled: Boolean) {
         with(sharedPreferences.edit()) {
-            putBoolean(PREF_ARTICLES_ENABLED, articlesEnabled)
+            putBoolean(PREF_ARTICLES_ENABLED + appWidgetId, articlesEnabled)
             apply()
         }
     }
 
-    override fun retrieveArticlesEnabled(): Boolean {
-        return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED, true)
+    override fun retrieveArticlesEnabled(appWidgetId: Int): Boolean {
+        return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED + appWidgetId, true)
     }
 
-    override fun storeTheme(themeResId: Int) {
+    override fun storeTheme(appWidgetId: Int, themeResId: Int) {
         with(sharedPreferences.edit()) {
-            putInt(PREF_THEME_ID, themeResId)
+            putInt(PREF_THEME_ID + appWidgetId, themeResId)
             apply()
         }
     }
 
-    override fun retrieveTheme(): Int {
-        return sharedPreferences.getInt(PREF_THEME_ID, R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings)
+    override fun retrieveTheme(appWidgetId: Int): Int {
+        return sharedPreferences.getInt(
+            PREF_THEME_ID + appWidgetId,
+            R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+        )
     }
 }

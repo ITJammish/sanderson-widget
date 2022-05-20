@@ -46,7 +46,7 @@ class ProgressItemWidgetService : RemoteViewsService() {
         private lateinit var data: List<ProgressItem>
 
         init {
-            val themeResId = SharedPreferencesStorage(context).retrieveTheme()
+            val themeResId = SharedPreferencesStorage(context).retrieveTheme(appWidgetId)
             themeColors = fetchThemeColors(context, themeResId)
         }
 
