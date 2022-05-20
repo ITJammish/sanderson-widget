@@ -5,8 +5,6 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.os.Build
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.itj.sandersonwidget.R
@@ -15,14 +13,15 @@ import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.ui.helper.ThemeColors
 import com.itj.sandersonwidget.ui.helper.fetchThemeColors
 import com.itj.sandersonwidget.ui.helper.fetchThemeResId
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
+import com.itj.sandersonwidget.ui.helper.setProgressBarColorCompat
+import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
 
 /**
- * https://www.youtube.com/watch?v=MMiuy9jK6X8&list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K&index=4
+ * A service that acts as a list adapter for the progress list items.
+ *
+ * - [NUMBER_OF_ITEMS] extra indicates how many of the four progress items should be displayed in this list,
+ *  i.e. when we show one or more progress items as a wheel; how many are left to show in this list.
  */
-// Number of items: uses items from the back of the list in cases where preceding items are shown with a full progress
-// widget
 class ProgressItemWidgetService : RemoteViewsService() {
 
     companion object {
@@ -64,16 +63,6 @@ class ProgressItemWidgetService : RemoteViewsService() {
         }
 
         override fun getCount(): Int {
-            /**
-             * 2022-05-03 14:32:40.184 8952-8964/com.itj.sandersonwidget E/AndroidRuntime: FATAL EXCEPTION: Binder:8952_1
-            Process: com.itj.sandersonwidget, PID: 8952
-            kotlin.UninitializedPropertyAccessException: lateinit property data has not been initialized
-            at com.itj.sandersonwidget.ui.service.ProgressItemWidgetService$ProgressItemWidgetFactory.getCount(ProgressItemWidgetService.kt:43)
-            at android.widget.RemoteViewsService$RemoteViewsFactoryAdapter.getCount(RemoteViewsService.java:154)
-            at com.android.internal.widget.IRemoteViewsFactory$Stub.onTransact(IRemoteViewsFactory.java:75)
-            at android.os.Binder.execTransact(Binder.java:565)
-            2022-05-03 14:32:40.212 1346-1369/? E/SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
-             */
             return if (numberOfItems == USE_ALL_ITEMS || data.size < numberOfItems) {
                 data.size
             } else {
@@ -93,50 +82,10 @@ class ProgressItemWidgetService : RemoteViewsService() {
                 setTextColor(R.id.item_title, themeColors.textColor)
 
                 setProgressBar(R.id.item_progress_bar, 100, data[imposedPosition].progressPercentage.toInt(), false)
-                setProgressBarColor(this)
+                setProgressBarColorCompat(this, themeColors.progressColor)
 
                 setTextViewText(R.id.item_percentage, "${data[imposedPosition].progressPercentage}%")
                 setTextColor(R.id.item_percentage, themeColors.textColor)
-            }
-        }
-
-        private fun setProgressBarColor(
-            remoteViews: RemoteViews,
-        ) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                remoteViews.setColorStateList(
-                    R.id.item_progress_bar,
-                    "setProgressTintList",
-                    ColorStateList.valueOf(themeColors.progressColor),
-                )
-            } else {
-                // Use manual reflection
-                var setTintMethod: Method? = null
-                try {
-                    setTintMethod =
-                        RemoteViews::class.java.getMethod(
-                            "setProgressTintList",
-                            Int::class.javaPrimitiveType,
-                            ColorStateList::class.java,
-                        )
-                } catch (e: SecurityException) {
-                    e.printStackTrace()
-                } catch (e: NoSuchMethodException) {
-                    e.printStackTrace()
-                }
-                if (setTintMethod != null) {
-                    try {
-                        setTintMethod.invoke(
-                            remoteViews,
-                            R.id.item_progress_bar,
-                            ColorStateList.valueOf(themeColors.progressColor),
-                        )
-                    } catch (e: IllegalAccessException) {
-                        e.printStackTrace()
-                    } catch (e: InvocationTargetException) {
-                        e.printStackTrace()
-                    }
-                }
             }
         }
 

@@ -307,7 +307,6 @@ class LayoutProvider {
     private fun RemoteViews.bindStyledBackground(context: Context) {
         // Decode styled scaled background image
         val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
-        // todo pull style id out of shared prefs/create a keymap for enum -> style that can be queried
         val styledBackgroundAttrs = context.obtainStyledAttributes(
             themeResId,
             backgroundAttrs
@@ -330,7 +329,6 @@ class LayoutProvider {
 
         // Decode styled scaled background image
         val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
-        // todo pull style id out of shared prefs/create a keymap for enum -> style that can be queried
         val styledBackgroundAttrs = context.obtainStyledAttributes(
             themeResId,
             backgroundAttrs

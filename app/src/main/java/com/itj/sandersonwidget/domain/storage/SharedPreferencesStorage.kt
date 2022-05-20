@@ -34,7 +34,6 @@ class SharedPreferencesStorage(context: Context) : Storage {
             .apply()
     }
 
-    // todo take in widget id so multiple widgets have their own data
     override fun storeProgressItemData(items: List<ProgressItem>) {
         // Sets are not ordered. Need to add OG position to encoding and sort by this in decode
         val encodedItems = items.mapIndexed { index, progressItem ->

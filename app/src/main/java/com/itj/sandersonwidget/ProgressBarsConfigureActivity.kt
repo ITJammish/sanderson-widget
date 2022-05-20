@@ -51,6 +51,7 @@ class ProgressBarsConfigureActivity : Activity() {
 
     private var onThemeSpinnerItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            // User visible values defined in <string-array name="themes_array">
             val chosenTheme = when (parent?.getItemAtPosition(position)) {
                 "Way of Kings" -> WayOfKings
                 "Words of Radiance" -> WordsOfRadiance
