@@ -15,6 +15,7 @@ import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.ui.helper.DimensionSize.*
 import com.itj.sandersonwidget.ui.helper.GridSize
 import com.itj.sandersonwidget.ui.helper.fetchThemeColors
+import com.itj.sandersonwidget.ui.helper.fetchThemeResId
 import com.itj.sandersonwidget.ui.service.ArticleListWidgetService
 import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService
 import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
@@ -37,7 +38,7 @@ class LayoutProvider {
         height: Int,
     ): RemoteViews {
         articlesEnabled = SharedPreferencesStorage(context).retrieveArticlesEnabled(appWidgetId)
-        themeResId = SharedPreferencesStorage(context).retrieveTheme(appWidgetId)
+        themeResId = SharedPreferencesStorage(context).retrieveTheme(appWidgetId).fetchThemeResId()
         val progressItemData = SharedPreferencesStorage(context).retrieveProgressItemData()
         if (progressItemData.isEmpty()) {
             return RemoteViews(context.packageName, R.layout.view_loading)

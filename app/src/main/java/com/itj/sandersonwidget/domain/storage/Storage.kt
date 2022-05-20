@@ -22,7 +22,7 @@ interface Storage {
 
     fun retrieveArticlesEnabled(appWidgetId: Int): Boolean
 
-    fun storeTheme(appWidgetId: Int, themeResId: Int)
+    fun storeTheme(appWidgetId: Int, themeId: Int)
 
     fun retrieveTheme(appWidgetId: Int): Int
 }

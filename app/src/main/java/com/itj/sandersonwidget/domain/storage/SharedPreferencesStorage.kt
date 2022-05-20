@@ -85,9 +85,9 @@ class SharedPreferencesStorage(context: Context) : Storage {
         return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED + appWidgetId, true)
     }
 
-    override fun storeTheme(appWidgetId: Int, themeResId: Int) {
+    override fun storeTheme(appWidgetId: Int, themeId: Int) {
         with(sharedPreferences.edit()) {
-            putInt(PREF_THEME_ID + appWidgetId, themeResId)
+            putInt(PREF_THEME_ID + appWidgetId, themeId)
             apply()
         }
     }

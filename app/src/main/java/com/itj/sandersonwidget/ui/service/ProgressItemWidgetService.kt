@@ -14,6 +14,7 @@ import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.ui.helper.ThemeColors
 import com.itj.sandersonwidget.ui.helper.fetchThemeColors
+import com.itj.sandersonwidget.ui.helper.fetchThemeResId
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 
@@ -46,7 +47,7 @@ class ProgressItemWidgetService : RemoteViewsService() {
         private lateinit var data: List<ProgressItem>
 
         init {
-            val themeResId = SharedPreferencesStorage(context).retrieveTheme(appWidgetId)
+            val themeResId = SharedPreferencesStorage(context).retrieveTheme(appWidgetId).fetchThemeResId()
             themeColors = fetchThemeColors(context, themeResId)
         }
 

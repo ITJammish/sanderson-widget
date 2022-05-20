@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
+import com.itj.sandersonwidget.ui.helper.Theme.*
 
 /**
  * The configuration screen for the [ProgressBarsWidgetProvider] AppWidget.
@@ -48,16 +49,15 @@ class ProgressBarsConfigureActivity : Activity() {
         finish()
     }
 
-    // Todo make matching nicer than hardcoded and error prone Strings
     private var onThemeSpinnerItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             val chosenTheme = when (parent?.getItemAtPosition(position)) {
-                "Way of Kings" -> R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
-                "Words of Radiance" -> R.style.Theme_SandersonWidget_AppWidgetContainer_WordsOfRadiance
-                "Oathbringer" -> R.style.Theme_SandersonWidget_AppWidgetContainer_Oathbringer
-                else -> R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+                "Way of Kings" -> WayOfKings
+                "Words of Radiance" -> WordsOfRadiance
+                "Oathbringer" -> Oathbringer
+                else -> WayOfKings
             }
-            sharedPreferences.storeTheme(appWidgetId, chosenTheme)
+            sharedPreferences.storeTheme(appWidgetId, chosenTheme.id)
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
