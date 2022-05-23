@@ -2,8 +2,13 @@ package com.itj.sandersonwidget.domain.storage
 
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
 
 interface Storage {
+
+    companion object {
+        const val INVALID_INT = -1
+    }
 
     fun clearAll()
 
@@ -24,4 +29,8 @@ interface Storage {
     fun storeTheme(appWidgetId: Int, themeId: Int)
 
     fun retrieveTheme(appWidgetId: Int): Int
+
+    fun storeLayoutConfig(appWidgetId: Int, config: WidgetLayoutConfig)
+
+    fun retrieveLayoutConfig(appWidgetId: Int): WidgetLayoutConfig
 }

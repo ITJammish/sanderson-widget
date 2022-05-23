@@ -5,6 +5,8 @@ import android.content.Context.MODE_PRIVATE
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.INVALID_INT
 
 class SharedPreferencesStorage(context: Context) : Storage {
 
@@ -13,7 +15,8 @@ class SharedPreferencesStorage(context: Context) : Storage {
         internal const val PROJECT_ITEMS = "progress_items"
         internal const val ARTICLES = "articles"
         internal const val PREF_ARTICLES_ENABLED = "pref_articles_enabled"
-        internal const val PREF_THEME_ID = "PREF_THEME_ID"
+        internal const val PREF_THEME_ID = "pref_theme_id"
+        internal const val PREF_LAYOUT_CONFIG = "pref_layout_config"
 
         internal const val DELIMITER = "DELIMITER"
     }
@@ -96,5 +99,29 @@ class SharedPreferencesStorage(context: Context) : Storage {
             PREF_THEME_ID + appWidgetId,
             R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
         )
+    }
+
+    override fun storeLayoutConfig(appWidgetId: Int, config: WidgetLayoutConfig) {
+        val compressedConfig =
+            "${config.gridSize.first}$DELIMITER${config.gridSize.second}$DELIMITER${config.width}$DELIMITER${config.height}"
+
+        with(sharedPreferences.edit()) {
+            putString(PREF_LAYOUT_CONFIG + appWidgetId, compressedConfig)
+            apply()
+        }
+    }
+
+    override fun retrieveLayoutConfig(appWidgetId: Int): WidgetLayoutConfig {
+        val storedValue = sharedPreferences.getString(PREF_LAYOUT_CONFIG + appWidgetId, "")
+        return if (storedValue.isNullOrEmpty()) {
+            WidgetLayoutConfig(gridSize = Pair("", ""), INVALID_INT, INVALID_INT)
+        } else {
+            val splitValues = storedValue.split(DELIMITER)
+            WidgetLayoutConfig(
+                gridSize = Pair(splitValues[0], splitValues[1]),
+                width = splitValues[2].toInt(),
+                height = splitValues[3].toInt(),
+            )
+        }
     }
 }

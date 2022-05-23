@@ -9,12 +9,15 @@ import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.RemoteViews
 import androidx.work.*
+import com.itj.sandersonwidget.ProgressBarsWidgetProvider.Companion.INVALID_WIDGET_DIMENSION
+import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
+import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.network.WebScraperWorker
 import com.itj.sandersonwidget.ui.helper.DimensionSize.Small
 import com.itj.sandersonwidget.ui.helper.GridSize
+import com.itj.sandersonwidget.ui.helper.getGridSizeForKeyPair
 import com.itj.sandersonwidget.ui.helper.getGridSizePortrait
 import com.itj.sandersonwidget.ui.layouts.LayoutProvider
 import java.util.concurrent.TimeUnit
@@ -29,7 +32,7 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
         const val ACTION_ARTICLE_CLICK = "com.itj.sandersonwidget.actionArticleClick"
         const val EXTRA_ARTICLE_POSITION = "extra_article_position"
         const val INVALID_ARTICLE_POSITION = -1
-        private const val INVALID_WIDGET_DIMENSION = -1
+        const val INVALID_WIDGET_DIMENSION = -1
     }
 
     private var appWidgetManager: AppWidgetManager? = null
@@ -93,14 +96,11 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
             val gridSize = getGridSizePortrait(minWidth, minHeight, maxHeight)
 
             if (minWidth != INVALID_WIDGET_DIMENSION) {
-                val portraitLayout = LayoutProvider().fetchLayout(context, appWidgetId, gridSize, minWidth, maxHeight)
-                val landscapeLayout = LayoutProvider().fetchLayout(context, appWidgetId, gridSize, maxWidth, minHeight)
-
                 val orientation = context.resources.configuration.orientation
                 if (orientation == ORIENTATION_PORTRAIT) {
-                    updateAppWidget(appWidgetManager, appWidgetId, portraitLayout)
+                    updateAppWidget(context, appWidgetManager, appWidgetId, gridSize, minWidth, maxHeight)
                 } else {
-                    updateAppWidget(appWidgetManager, appWidgetId, landscapeLayout)
+                    updateAppWidget(context, appWidgetManager, appWidgetId, gridSize, maxWidth, minHeight)
                 }
             }
         }
@@ -127,20 +127,45 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int,
     gridSize: GridSize = GridSize(Small, Small),
-    width: Int = 50,
-    height: Int = 50,
+    width: Int = INVALID_WIDGET_DIMENSION,
+    height: Int = INVALID_WIDGET_DIMENSION,
 ) {
-    val views = LayoutProvider().fetchLayout(context, appWidgetId, gridSize, width, height)
+    val views = if (width == INVALID_WIDGET_DIMENSION) {
+        // Attempt to retrieve previously set LayoutConfig
+        val storedWidgetLayoutConfig = SharedPreferencesStorage(context).retrieveLayoutConfig(appWidgetId)
+        val storedGridSize = getGridSizeForKeyPair(storedWidgetLayoutConfig.gridSize)
+        val storedWidth = if (storedWidgetLayoutConfig.width != Storage.INVALID_INT) {
+            storedWidgetLayoutConfig.width
+        } else {
+            50
+        }
+        val storedHeight = if (storedWidgetLayoutConfig.height != Storage.INVALID_INT) {
+            storedWidgetLayoutConfig.height
+        } else {
+            50
+        }
 
-    // Instruct the widget manager to update the widget
-    appWidgetManager.updateAppWidget(appWidgetId, views)
-}
+        // return View
+        LayoutProvider().fetchLayout(
+            context,
+            appWidgetId,
+            storedGridSize,
+            storedWidth,
+            storedHeight,
+        )
+    } else {
+        // Store new valid LayoutConfig
+        val newWidgetLayoutConfig = WidgetLayoutConfig(
+            gridSize = Pair(gridSize.width.key, gridSize.height.key),
+            width = width,
+            height = height,
+        )
+        SharedPreferencesStorage(context).storeLayoutConfig(appWidgetId, newWidgetLayoutConfig)
 
-internal fun updateAppWidget(
-    appWidgetManager: AppWidgetManager,
-    appWidgetId: Int,
-    views: RemoteViews,
-) {
+        // return View
+        LayoutProvider().fetchLayout(context, appWidgetId, gridSize, width, height)
+    }
+
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)
 }
