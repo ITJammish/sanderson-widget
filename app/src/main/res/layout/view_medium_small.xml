@@ -4,7 +4,8 @@
     style="@style/Widget.SandersonWidget.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.SandersonWidget.AppWidgetContainer">
+    android:theme="@style/Theme.SandersonWidget.AppWidgetContainer"
+    tools:layout_height="166dip">
 
     <include layout="@layout/include_widget_background_view" />
 
@@ -49,9 +50,13 @@
             <ListView
                 android:id="@+id/progress_item_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:layout_height="146dip"
+                tools:listitem="@layout/item_view_progress" />
 
-            <include layout="@layout/include_progress_list_empty_view" />
+            <include
+                layout="@layout/include_progress_list_empty_view"
+                tools:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 </FrameLayout>

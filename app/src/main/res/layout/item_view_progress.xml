@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
     android:background="@drawable/background_progress_item_view"
     android:orientation="vertical"
@@ -22,14 +22,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            tools:text="Warbreaker" />
+            tools:text="Warbreaker"
+            tools:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/item_percentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            tools:text="48%" />
+            tools:text="48%"
+            tools:textColor="@android:color/white" />
     </LinearLayout>
 
     <ProgressBar
@@ -38,5 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:progress="0"
-        tools:progress="48" />
+        tools:progress="48"
+        tools:progressTint="@android:color/holo_red_dark" />
 </LinearLayout>

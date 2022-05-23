@@ -13,6 +13,10 @@ private const val SET_PROGRESS_TINT_LIST_METHOD_NAME = "setProgressTintList"
 /**
  * Invokes the `setProgressTintList()` method from [android.widget.ProgressBar]. This method is not visible from the
  * RemoteViews API, so we have to resort to reflection. There are different ways to do this based on API level.
+ *
+ * N.B. This currently does not work with Android 11: running `RemoteViews::class.java.methods` at runtime reveals that
+ * `setProgressTintList()` does not exist for this version of Android and cannot therefore be reflected and called. No
+ * alternative method exists. A work around might be possible with style manipulation at runtime.
  */
 internal fun setProgressBarColorCompat(remoteViews: RemoteViews, progressColor: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
