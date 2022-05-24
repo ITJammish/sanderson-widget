@@ -9,6 +9,7 @@ import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.work.*
 import com.itj.sandersonwidget.ProgressBarsWidgetProvider.Companion.INVALID_WIDGET_DIMENSION
 import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
@@ -134,25 +135,19 @@ internal fun updateAppWidget(
         // Attempt to retrieve previously set LayoutConfig
         val storedWidgetLayoutConfig = SharedPreferencesStorage(context).retrieveLayoutConfig(appWidgetId)
         val storedGridSize = getGridSizeForKeyPair(storedWidgetLayoutConfig.gridSize)
-        val storedWidth = if (storedWidgetLayoutConfig.width != Storage.INVALID_INT) {
-            storedWidgetLayoutConfig.width
-        } else {
-            50
-        }
-        val storedHeight = if (storedWidgetLayoutConfig.height != Storage.INVALID_INT) {
-            storedWidgetLayoutConfig.height
-        } else {
-            50
-        }
 
-        // return View
-        LayoutProvider().fetchLayout(
-            context,
-            appWidgetId,
-            storedGridSize,
-            storedWidth,
-            storedHeight,
-        )
+        if (storedWidgetLayoutConfig.width != Storage.INVALID_INT && storedWidgetLayoutConfig.height != Storage.INVALID_INT) {
+            // return View
+            LayoutProvider().fetchLayout(
+                context,
+                appWidgetId,
+                storedGridSize,
+                storedWidgetLayoutConfig.width,
+                storedWidgetLayoutConfig.height,
+            )
+        } else {
+            RemoteViews(context.packageName, R.layout.view_initial_layout)
+        }
     } else {
         // Store new valid LayoutConfig
         val newWidgetLayoutConfig = WidgetLayoutConfig(
