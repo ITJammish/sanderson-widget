@@ -3,8 +3,10 @@ package com.itj.sandersonwidget.domain.storage
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
+import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.ARTICLES
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.DELIMITER
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion.PREFS_NAME
@@ -12,13 +14,21 @@ import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage.Companion
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
 class SharedPreferencesStorageTest {
 
     private companion object {
+        private const val APP_WIDGET_ID = 34
+        private const val THEME_ID = 99
+        private const val GRID_WIDTH = "small"
+        private const val GRID_HEIGHT = "height"
+        private const val WIDTH = 45
+        private const val HEIGHT = 83
+        private const val COMPRESSED_CONFIG = "$GRID_WIDTH$DELIMITER$GRID_HEIGHT$DELIMITER$WIDTH$DELIMITER$HEIGHT"
+
         val progressItems = listOf(
             ProgressItem("label1", "percentage1"),
             ProgressItem("label2", "percentage2"),
@@ -55,6 +65,13 @@ class SharedPreferencesStorageTest {
     private val mockSharedPreferences = mockk<SharedPreferences>().also {
         every { it.edit() } returns mockSharedPreferencesEditor
     }
+    private val mockWidgetLayoutConfig = mockk<WidgetLayoutConfig>().also {
+        every { it.gridSize.first } returns GRID_WIDTH
+        every { it.gridSize.second } returns GRID_HEIGHT
+        every { it.width } returns WIDTH
+        every { it.height } returns HEIGHT
+    }
+
     private val mockContext = mockk<Context>().also {
         every { it.getSharedPreferences(PREFS_NAME, MODE_PRIVATE) } returns mockSharedPreferences
     }
@@ -122,5 +139,112 @@ class SharedPreferencesStorageTest {
         val articlesResult = subject.retrieveArticleData()
 
         assert(articlesResult.isEmpty())
+    }
+
+    @Test
+    fun storeArticlesEnabled_true() {
+        subject.storeArticlesEnabled(APP_WIDGET_ID, true)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putBoolean(SharedPreferencesStorage.PREF_ARTICLES_ENABLED + APP_WIDGET_ID, true)
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun storeArticlesEnabled_false() {
+        subject.storeArticlesEnabled(APP_WIDGET_ID, false)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putBoolean(
+                SharedPreferencesStorage.PREF_ARTICLES_ENABLED + APP_WIDGET_ID,
+                false
+            )
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun retrieveArticlesEnabled_true() {
+        every {
+            mockSharedPreferences.getBoolean(
+                SharedPreferencesStorage.PREF_ARTICLES_ENABLED + APP_WIDGET_ID,
+                true
+            )
+        } returns true
+
+        val articlesEnabledResult = subject.retrieveArticlesEnabled(APP_WIDGET_ID)
+
+        assertTrue(articlesEnabledResult)
+    }
+
+    @Test
+    fun retrieveArticlesEnabled_false() {
+        every {
+            mockSharedPreferences.getBoolean(
+                SharedPreferencesStorage.PREF_ARTICLES_ENABLED + APP_WIDGET_ID,
+                true
+            )
+        } returns false
+
+        val articlesEnabledResult = subject.retrieveArticlesEnabled(APP_WIDGET_ID)
+
+        assertFalse(articlesEnabledResult)
+    }
+
+    @Test
+    fun storeTheme() {
+        subject.storeTheme(APP_WIDGET_ID, THEME_ID)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putInt(SharedPreferencesStorage.PREF_THEME_ID + APP_WIDGET_ID, THEME_ID)
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun retrieveTheme() {
+        every {
+            mockSharedPreferences.getInt(
+                SharedPreferencesStorage.PREF_THEME_ID + APP_WIDGET_ID,
+                R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+            )
+        } returns THEME_ID
+
+        val themeResult = subject.retrieveTheme(APP_WIDGET_ID)
+
+        assertEquals(THEME_ID, themeResult)
+    }
+
+    @Test
+    fun storeLayoutConfig() {
+        subject.storeLayoutConfig(APP_WIDGET_ID, mockWidgetLayoutConfig)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putString(
+                SharedPreferencesStorage.PREF_LAYOUT_CONFIG + APP_WIDGET_ID,
+                COMPRESSED_CONFIG,
+            )
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun retrieveLayoutConfig() {
+        every {
+            mockSharedPreferences.getString(
+                SharedPreferencesStorage.PREF_LAYOUT_CONFIG + APP_WIDGET_ID,
+                ""
+            )
+        } returns COMPRESSED_CONFIG
+        val expectedLayoutConfig = WidgetLayoutConfig(Pair(GRID_WIDTH, GRID_HEIGHT), WIDTH, HEIGHT)
+
+        val layoutConfigResult = subject.retrieveLayoutConfig(APP_WIDGET_ID)
+
+        assertEquals(expectedLayoutConfig, layoutConfigResult)
     }
 }

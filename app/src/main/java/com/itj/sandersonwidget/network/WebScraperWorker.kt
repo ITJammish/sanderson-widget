@@ -1,11 +1,8 @@
 package com.itj.sandersonwidget.network
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.itj.sandersonwidget.domain.WebScraperResponseHandler
 
@@ -20,7 +17,6 @@ class WebScraperWorker(private val context: Context, workerParams: WorkerParamet
     Worker(context, workerParams) {
 
     companion object {
-        private const val TARGET_PAGE_URL = "https://www.brandonsanderson.com/"
     }
 
     override fun doWork(): Result {
@@ -28,14 +24,7 @@ class WebScraperWorker(private val context: Context, workerParams: WorkerParamet
         val queue = Volley.newRequestQueue(context)
 
         // Request a string response from the provided URL.
-        StringRequest(
-            Request.Method.GET, TARGET_PAGE_URL,
-            { response -> WebScraperResponseHandler(context).handleWebScrapedResponse(response) },
-            {
-                // TODO add real logging/error handling
-                Log.d("JamesDebug:", "ERROR: $it")
-            },
-        ).also {
+        getStringRequest(context).also {
             // Add the request to the RequestQueue.
             // TODO killed network request while working on canvas spike
 //            queue.add(it)
