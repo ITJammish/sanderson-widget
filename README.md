@@ -22,4 +22,11 @@ In order to run this project simply pull the code, build, install and have fun. 
 
 If you'd like to learn more about coding widgets [this is a good introduction](https://developer.android.com/guide/topics/appwidgets/overview). [Android Studio](https://developer.android.com/studio) also offers a Widget template that is a very useful place to start. I also found [this video tutorial series](https://www.youtube.com/playlist?list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K) by [Coding in Flow](https://www.youtube.com/c/CodinginFlow) very helpful.
 
+
+### Known Issues:
+- Theming specifically on Android 11 devices is not fully working: the flat progress bars are showing a default colour value.
+- Background images are not resizing automatically when the device is rotated.
+
+If you find any unlisted issues please raise an issue [here](https://github.com/ITJammish/sanderson-widget/issues), or [message me on 17th shard](https://www.17thshard.com/forum/messenger/compose/?to=14030).
+
 Thank you!
