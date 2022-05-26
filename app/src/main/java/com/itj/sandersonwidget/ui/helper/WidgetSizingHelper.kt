@@ -35,10 +35,10 @@ internal fun getGridSizeForKeyPair(pair: Pair<String, String>): GridSize {
  *
  *  ------
  *  \    \
- *  \    \ long side
+ *  \    \ long side (height)
  *  \    \
  *  ------
- * short side
+ * short side (width)
  */
 internal fun getGridSizePortrait(width: Int, height: Int): GridSize {
     val widthCells = (width + 16) / 73
@@ -53,9 +53,9 @@ internal fun getGridSizePortrait(width: Int, height: Int): GridSize {
  * When the device is landscape the width of the widget is parallel to the longer side of the device:
  *
  *  \------------\
- *  \            \ short side
+ *  \            \ short side (height)
  *  \------------\
- *    long side
+ *    long side (width)
  */
 internal fun getGridSizeLandscape(width: Int, height: Int): GridSize {
     val widthCells = (width + 15) / 142
