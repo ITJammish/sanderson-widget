@@ -18,6 +18,7 @@ import com.itj.sandersonwidget.network.WebScraperWorker
 import com.itj.sandersonwidget.ui.helper.DimensionSize.Small
 import com.itj.sandersonwidget.ui.helper.GridSize
 import com.itj.sandersonwidget.ui.helper.getGridSizeForKeyPair
+import com.itj.sandersonwidget.ui.helper.getGridSizeLandscape
 import com.itj.sandersonwidget.ui.helper.getGridSizePortrait
 import com.itj.sandersonwidget.ui.layouts.LayoutProvider
 import java.util.concurrent.TimeUnit
@@ -87,13 +88,14 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
             val minHeight = it.get(OPTION_APPWIDGET_MIN_HEIGHT) as Int? ?: INVALID_WIDGET_DIMENSION
             val maxHeight = it.get(OPTION_APPWIDGET_MAX_HEIGHT) as Int? ?: INVALID_WIDGET_DIMENSION
 
-            val gridSize = getGridSizePortrait(minWidth, minHeight, maxHeight)
 
             if (minWidth != INVALID_WIDGET_DIMENSION) {
                 val orientation = context.resources.configuration.orientation
                 if (orientation == ORIENTATION_PORTRAIT) {
+                    val gridSize = getGridSizePortrait(minWidth, maxHeight)
                     updateAppWidget(context, appWidgetManager, appWidgetId, gridSize, minWidth, maxHeight)
                 } else {
+                    val gridSize = getGridSizeLandscape(maxWidth, minHeight)
                     updateAppWidget(context, appWidgetManager, appWidgetId, gridSize, maxWidth, minHeight)
                 }
             }
