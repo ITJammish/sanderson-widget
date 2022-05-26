@@ -7,6 +7,13 @@ import android.graphics.Paint
 import androidx.core.content.res.ResourcesCompat.getColor
 import com.itj.sandersonwidget.R
 
+/**
+ * A custom vector graphic exported as a BitMap so it can be applied to a widget's ImageView.
+ *
+ * Since the set of RemoteViews is so limited: any custom view must be drawn using Canvas and exported as a flat
+ * asset to be displayed as an Image. This specific image is the circular progress widget; it is formed by stacking
+ * drawn circles on top of each other.
+ */
 internal fun getCustomProgressBarBitMap(
     context: Context,
     frameSize: Int,

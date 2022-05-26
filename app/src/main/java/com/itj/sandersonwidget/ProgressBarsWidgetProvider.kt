@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.RemoteViews
 import androidx.work.*
 import com.itj.sandersonwidget.ProgressBarsWidgetProvider.Companion.INVALID_WIDGET_DIMENSION
@@ -43,9 +42,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        for (appWidgetId in appWidgetIds) {
-            Log.d("JamesDebug:", "onUpdate with $appWidgetId")
-        }
         this.appWidgetManager = appWidgetManager
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
@@ -56,7 +52,6 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            Log.d("JamesDebug:", "onDeleted $appWidgetId")
             SharedPreferencesStorage(context).clearForAppWidgetId(appWidgetId)
         }
     }
@@ -64,14 +59,12 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
         // Enter relevant functionality for when the first widget is created
         startWorkRequest(context)
-        Log.d("JamesDebug:", "onEnabled")
     }
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
-        Log.d("JamesDebug:", "onDisabled")
         cancelWorkRequest(context)
-//        SharedPreferencesStorage(context).clearAll() // todo re-enable when we turn the network calls back on
+        SharedPreferencesStorage(context).clearAll()
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -123,6 +116,12 @@ class ProgressBarsWidgetProvider : AppWidgetProvider() {
     }
 }
 
+/**
+ * This will be called with [INVALID_WIDGET_DIMENSION] when the widget is first created, and when the home screen
+ * cycles it's lifecycle events (home screen is brought back from the background, or the device is rebooted). The
+ * previous layout configuration is not reapplied by default, so we have to save and retrieve it during these
+ * lifecycle events.
+ */
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,

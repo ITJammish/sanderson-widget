@@ -1,7 +1,5 @@
 package com.itj.sandersonwidget.ui.service
 
-import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
-import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,22 +11,28 @@ import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 
-
+/**
+ * A service that acts as a list adapter for the article stack items.
+ */
 class ArticleListWidgetService : RemoteViewsService() {
 
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
-        return ArticleListWidgetFactory(applicationContext, intent)
+        return ArticleListWidgetFactory(applicationContext)
     }
 
     internal class ArticleListWidgetFactory(
         private val context: Context,
-        intent: Intent?
     ) : RemoteViewsFactory {
 
-        private val appWidgetId = intent?.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
+        companion object {
+            private const val WEBSITE_ARTICLE_IMAGE_WIDTH = 768
+            private const val WEBSITE_ARTICLE_IMAGE_HEIGHT = 512
+        }
+
         private lateinit var data: List<Article>
 
         override fun onCreate() {
+            // NI
         }
 
         override fun onDataSetChanged() {
@@ -49,7 +53,7 @@ class ArticleListWidgetService : RemoteViewsService() {
                 articleImage = Glide.with(context)
                     .asBitmap()
                     .load(data[position].thumbnailUrl)
-                    .submit(512, 512) // todo change image sizes to match tutorial recommended/aspect ratio of source
+                    .submit(WEBSITE_ARTICLE_IMAGE_WIDTH, WEBSITE_ARTICLE_IMAGE_HEIGHT)
                     .get()
             } catch (e: Exception) {
                 e.printStackTrace()

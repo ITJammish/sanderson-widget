@@ -2,12 +2,16 @@ package com.itj.sandersonwidget.domain.storage
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_ARTICLES_ENABLED
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_THEME_RES_ID
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.INVALID_INT
 
+/**
+ * Uses SharedPreferences to store widget data using primitives.
+ */
 class SharedPreferencesStorage(context: Context) : Storage {
 
     companion object {
@@ -84,7 +88,7 @@ class SharedPreferencesStorage(context: Context) : Storage {
     }
 
     override fun retrieveArticlesEnabled(appWidgetId: Int): Boolean {
-        return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED + appWidgetId, true)
+        return sharedPreferences.getBoolean(PREF_ARTICLES_ENABLED + appWidgetId, DEFAULT_ARTICLES_ENABLED)
     }
 
     override fun storeTheme(appWidgetId: Int, themeId: Int) {
@@ -97,7 +101,7 @@ class SharedPreferencesStorage(context: Context) : Storage {
     override fun retrieveTheme(appWidgetId: Int): Int {
         return sharedPreferences.getInt(
             PREF_THEME_ID + appWidgetId,
-            R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+            DEFAULT_THEME_RES_ID
         )
     }
 

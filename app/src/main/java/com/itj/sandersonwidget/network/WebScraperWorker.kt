@@ -26,8 +26,7 @@ class WebScraperWorker(private val context: Context, workerParams: WorkerParamet
         // Request a string response from the provided URL.
         getStringRequest(context).also {
             // Add the request to the RequestQueue.
-            // TODO killed network request while working on canvas spike
-//            queue.add(it)
+            queue.add(it)
         }
 
         return Result.success()

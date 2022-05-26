@@ -1,5 +1,6 @@
 package com.itj.sandersonwidget.ui.layouts
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -12,6 +13,8 @@ import com.itj.sandersonwidget.ProgressBarsWidgetProvider
 import com.itj.sandersonwidget.R
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_ARTICLES_ENABLED
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_THEME_RES_ID
 import com.itj.sandersonwidget.ui.helper.DimensionSize.*
 import com.itj.sandersonwidget.ui.helper.GridSize
 import com.itj.sandersonwidget.ui.helper.fetchThemeColors
@@ -21,14 +24,10 @@ import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService
 import com.itj.sandersonwidget.ui.service.ProgressItemWidgetService.Companion.NUMBER_OF_ITEMS
 import com.itj.sandersonwidget.ui.view.getCustomProgressBarBitMap
 
-/**
- * https://developer.android.com/guide/topics/appwidgets/layouts
- */
 class LayoutProvider {
 
-    // Todo duplicating default behaviour (also specified in SharedPrefs)
-    private var articlesEnabled = true
-    private var themeResId = R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+    private var articlesEnabled = DEFAULT_ARTICLES_ENABLED
+    private var themeResId = DEFAULT_THEME_RES_ID
 
     internal fun fetchLayout(
         context: Context,
@@ -268,6 +267,7 @@ class LayoutProvider {
         setEmptyView(R.id.progress_item_list, R.id.progress_list_empty_view)
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun RemoteViews.bindArticleStack(
         context: Context,
         appWidgetId: Int,
@@ -283,7 +283,6 @@ class LayoutProvider {
         val clickArticlePendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getBroadcast(context, 0, articleClickIntent, PendingIntent.FLAG_MUTABLE)
         } else {
-            // Todo test with older Android versions
             PendingIntent.getBroadcast(context, 0, articleClickIntent, 0)
         }
 

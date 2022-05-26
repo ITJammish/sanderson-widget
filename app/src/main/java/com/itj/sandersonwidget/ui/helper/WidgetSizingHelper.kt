@@ -1,8 +1,6 @@
 package com.itj.sandersonwidget.ui.helper
 
-/**
- * https://developer.android.com/guide/topics/appwidgets/layouts
- */
+
 private const val KEY_SMALL = "DimensionSize_Small"
 private const val KEY_MEDIUM = "DimensionSize_Medium"
 private const val KEY_LARGE = "DimensionSize_Large"

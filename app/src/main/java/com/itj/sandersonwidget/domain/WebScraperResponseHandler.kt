@@ -43,11 +43,10 @@ class WebScraperResponseHandler(
             }
 
             // Push Intent to prompt widget update
-            var ids: IntArray
-            AppWidgetManager.getInstance(context).also {
-                ids = it.getAppWidgetIds(componentNameFetcher.fetchProgressBarsWidgetProviderComponentName(context))
-//                        it.notifyAppWidgetViewDataChanged(ids, android.R.id.list)
-            }
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val ids = appWidgetManager.getAppWidgetIds(
+                componentNameFetcher.fetchProgressBarsWidgetProviderComponentName(context)
+            )
             // Intent.putExtra returns an intent, but the initial val reference only holds the initial state
             // so we need to reassign the return putExtra return value to a new val
             val updateWidgetIntent = intentProvider.fetchUpdateWidgetIntent(context)
