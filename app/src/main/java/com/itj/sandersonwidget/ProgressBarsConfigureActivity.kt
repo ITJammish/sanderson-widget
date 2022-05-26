@@ -106,9 +106,11 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
         if (chosenThemeLabel != NO_THEME_CHOSEN) {
             // User visible values defined in <string-array name="themes_array">
             val chosenTheme = when (chosenThemeLabel) {
+                "None" -> Blank
                 "Way of Kings" -> WayOfKings
                 "Words of Radiance" -> WordsOfRadiance
                 "Oathbringer" -> Oathbringer
+                "Roshar map" -> Roshar
                 else -> WayOfKings
             }
             sharedPreferences.storeTheme(appWidgetId, chosenTheme.id)
