@@ -9,8 +9,10 @@
     <string name="please_resize_this_widget_to_get_started">Please resize this widget to get started. (Long press and release).</string>
 
     <string-array name="themes_array">
-        <item>Way of Kings</item>
-        <item>Words of Radiance</item>
-        <item>Oathbringer</item>
+        <item>None</item>
+        <!--<item>Way of Kings</item>-->
+        <!--<item>Words of Radiance</item>-->
+        <!--<item>Oathbringer</item>-->
+        <item>Roshar map</item>
     </string-array>
 </resources>

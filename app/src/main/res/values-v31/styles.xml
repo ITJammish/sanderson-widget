@@ -6,12 +6,6 @@
         <item name="android:clipToOutline">true</item>
     </style>
 
-    <style name="Widget.SandersonWidget.AppWidget.InnerView" parent="android:Widget">
-        <item name="android:padding">?attr/appWidgetPadding</item>
-        <item name="android:background">@drawable/app_widget_inner_view_background</item>
-        <item name="android:clipToOutline">true</item>
-    </style>
-
     <style name="BookCoverBackground">
         <item name="android:scaleType">fitXY</item>
     </style>

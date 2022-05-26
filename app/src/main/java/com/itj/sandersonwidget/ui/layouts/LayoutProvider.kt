@@ -296,6 +296,10 @@ class LayoutProvider {
         width: Int,
         height: Int,
     ) {
+        if (themeResId == R.style.Theme_SandersonWidget_AppWidgetContainer_Blank) {
+            return
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             bindStyledBackground(context)
         } else {

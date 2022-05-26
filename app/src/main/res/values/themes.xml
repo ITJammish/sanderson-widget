@@ -29,6 +29,11 @@
         <item name="appWidgetPadding">0dp</item>
     </style>
 
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank">
+        <item name="appWidgetTextColor">@android:color/white</item>
+        <item name="appWidgetProgressBarColor">@android:color/holo_blue_dark</item>
+    </style>
+
     <style name="Theme.SandersonWidget.AppWidgetContainer.WayOfKings">
         <item name="appWidgetBackgroundImage">@drawable/way_of_kings</item>
         <item name="appWidgetTextColor">@android:color/white</item>
@@ -43,6 +48,12 @@
 
     <style name="Theme.SandersonWidget.AppWidgetContainer.Oathbringer">
         <item name="appWidgetBackgroundImage">@drawable/oathbringer</item>
+        <item name="appWidgetTextColor">@android:color/white</item>
+        <item name="appWidgetProgressBarColor">@android:color/holo_orange_dark</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Roshar">
+        <item name="appWidgetBackgroundImage">@drawable/roshar_map</item>
         <item name="appWidgetTextColor">@android:color/white</item>
         <item name="appWidgetProgressBarColor">@android:color/holo_orange_dark</item>
     </style>

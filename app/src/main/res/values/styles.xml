@@ -2,12 +2,8 @@
 
     <style name="Widget.SandersonWidget.AppWidget.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
-        <item name="android:background">?android:attr/colorBackground</item>
-    </style>
-
-    <style name="Widget.SandersonWidget.AppWidget.InnerView" parent="android:Widget">
-        <item name="android:background">?android:attr/colorBackground</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:padding">?attr/appWidgetPadding</item>
+        <item name="android:background">@drawable/app_widget_background</item>
     </style>
 
     <style name="BookCoverBackground" />
