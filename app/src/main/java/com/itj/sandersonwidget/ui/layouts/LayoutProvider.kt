@@ -300,66 +300,66 @@ class LayoutProvider {
             return
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            bindStyledBackground(context)
-        } else {
-            bindStyledBackgroundManual(context, width, height)
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            bindStyledBackground(context)
+//        } else {
+//            bindStyledBackgroundManual(context, width, height)
+//        }
     }
 
-    private fun RemoteViews.bindStyledBackground(context: Context) {
-        // Decode styled scaled background image
-        val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
-        val styledBackgroundAttrs = context.obtainStyledAttributes(
-            themeResId,
-            backgroundAttrs
-        )
-        val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.way_of_kings)
-        styledBackgroundAttrs.recycle()
+//    private fun RemoteViews.bindStyledBackground(context: Context) {
+//        // Decode styled scaled background image
+//        val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
+//        val styledBackgroundAttrs = context.obtainStyledAttributes(
+//            themeResId,
+//            backgroundAttrs
+//        )
+//        val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.way_of_kings)
+//        styledBackgroundAttrs.recycle()
+//
+//        setImageViewResource(R.id.widget_background_view, backgroundResId)
+//    }
 
-        setImageViewResource(R.id.widget_background_view, backgroundResId)
-    }
-
-    private fun RemoteViews.bindStyledBackgroundManual(
-        context: Context,
-        width: Int,
-        height: Int,
-    ) {
-        // Calculate widget dimensions
-        val screenDensity = context.resources.displayMetrics.density
-        val widgetWidth = (screenDensity * width).toInt()
-        val widgetHeight = (screenDensity * height).toInt()
-
-        // Decode styled scaled background image
-        val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
-        val styledBackgroundAttrs = context.obtainStyledAttributes(
-            themeResId,
-            backgroundAttrs
-        )
-        val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.way_of_kings)
-        styledBackgroundAttrs.recycle()
-
-        val options = BitmapFactory.Options().apply {
-            inMutable = true
-        }
-        val result = Bitmap.createBitmap(widgetWidth, widgetHeight, Bitmap.Config.ARGB_8888)
-        val rawBitmap = BitmapFactory.decodeResource(context.resources, backgroundResId, options)
-        val bitmap = Bitmap.createScaledBitmap(rawBitmap, widgetWidth, widgetHeight, true)
-        val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        val paint = Paint().apply {
-            isAntiAlias = true
-            this.shader = shader
-        }
-
-        // Obtain corner radius from styles
-        val attrs = intArrayOf(R.attr.appWidgetRadius)
-        val styledAttr = context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer, attrs)
-        val radius = styledAttr.getDimension(0, 0f)
-        styledAttr.recycle()
-
-        // Cut background image corners and apply to image view
-        val rect = RectF(0.0f, 0.0f, widgetWidth.toFloat(), widgetHeight.toFloat())
-        Canvas(result).apply { drawRoundRect(rect, radius, radius, paint) }
-        setImageViewBitmap(R.id.widget_background_view, result)
-    }
+//    private fun RemoteViews.bindStyledBackgroundManual(
+//        context: Context,
+//        width: Int,
+//        height: Int,
+//    ) {
+//        // Calculate widget dimensions
+//        val screenDensity = context.resources.displayMetrics.density
+//        val widgetWidth = (screenDensity * width).toInt()
+//        val widgetHeight = (screenDensity * height).toInt()
+//
+//        // Decode styled scaled background image
+//        val backgroundAttrs = intArrayOf(R.attr.appWidgetBackgroundImage)
+//        val styledBackgroundAttrs = context.obtainStyledAttributes(
+//            themeResId,
+//            backgroundAttrs
+//        )
+//        val backgroundResId = styledBackgroundAttrs.getResourceId(0, R.drawable.way_of_kings)
+//        styledBackgroundAttrs.recycle()
+//
+//        val options = BitmapFactory.Options().apply {
+//            inMutable = true
+//        }
+//        val result = Bitmap.createBitmap(widgetWidth, widgetHeight, Bitmap.Config.ARGB_8888)
+//        val rawBitmap = BitmapFactory.decodeResource(context.resources, backgroundResId, options)
+//        val bitmap = Bitmap.createScaledBitmap(rawBitmap, widgetWidth, widgetHeight, true)
+//        val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+//        val paint = Paint().apply {
+//            isAntiAlias = true
+//            this.shader = shader
+//        }
+//
+//        // Obtain corner radius from styles
+//        val attrs = intArrayOf(R.attr.appWidgetRadius)
+//        val styledAttr = context.obtainStyledAttributes(R.style.Theme_SandersonWidget_AppWidgetContainer, attrs)
+//        val radius = styledAttr.getDimension(0, 0f)
+//        styledAttr.recycle()
+//
+//        // Cut background image corners and apply to image view
+//        val rect = RectF(0.0f, 0.0f, widgetWidth.toFloat(), widgetHeight.toFloat())
+//        Canvas(result).apply { drawRoundRect(rect, radius, radius, paint) }
+//        setImageViewBitmap(R.id.widget_background_view, result)
+//    }
 }
