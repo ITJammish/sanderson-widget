@@ -10,7 +10,7 @@ interface Storage {
     companion object {
         internal const val INVALID_INT = -1
         internal const val DEFAULT_ARTICLES_ENABLED = true
-        internal const val DEFAULT_THEME_RES_ID = R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+        internal const val DEFAULT_THEME_RES_ID = R.style.Theme_SandersonWidget_AppWidgetContainer_Blank
     }
 
     fun clearAll()
