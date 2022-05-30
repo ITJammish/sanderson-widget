@@ -1,5 +1,7 @@
 # Keeping up with Sanderson
 
+![Sanderson Widget 1.0 screen screenshot](screenshot_sanderson_widget_2x2_port.png "Sanderson Widget 1.0 screen screenshot")
+
 [Brandon Sanderson](https://en.wikipedia.org/wiki/Brandon_Sanderson), sci-fi and fantasy author, is known in the industry for writing _incredibly_ fast. During the pandemic Brandon was able to write [5 extra novels](https://www.youtube.com/watch?v=6a-k6eaT-jQ) in the time freed up by cancelled book touring. The man is a machine, and this is good news for his readers! He has so many projects and book series that it's hard to know when the next book is coming out. Thankfully Brandon's team let us know by publishing his writing progress on his [website]([https://www.brandonsanderson.com/](https://www.brandonsanderson.com/)), but wouldn't it be great if you could be more seamlessly kept up to date? Yes, there's a mailing list... but now there's an Android home screen widget too!
 
 The **Sanderson progress widget** is an indie project that I wanted to build for myself, but made sense to publish for the wider Sanderfans.
