@@ -35,7 +35,7 @@ internal fun getCustomProgressBarBitMap(
     canvas.drawColor(backgroundColor)
 
     val outLineCirclePaint = Paint().apply {
-        color = progressColor // here
+        color = progressColor
         strokeWidth = 10f
         isAntiAlias = true
     }

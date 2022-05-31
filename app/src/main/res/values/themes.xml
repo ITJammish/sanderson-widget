@@ -29,11 +29,7 @@
         <item name="appWidgetPadding">0dp</item>
     </style>
 
-    <!-- TODO: use dynamic colours from wallpaper API27+ https://developer.android.com/reference/kotlin/android/app/WallpaperManager.html#getWallpaperColors(kotlin.Int) -->
-    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank">
-        <item name="appWidgetTextColor">@android:color/white</item>
-        <item name="appWidgetProgressBarColor">@android:color/holo_blue_dark</item>
-    </style>
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank" />
 
     <!-- Disabled until they're worked on more post 1.0 -->
 <!--    <style name="Theme.SandersonWidget.AppWidgetContainer.WayOfKings">-->

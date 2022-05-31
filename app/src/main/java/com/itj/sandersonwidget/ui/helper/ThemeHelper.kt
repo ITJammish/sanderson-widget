@@ -1,5 +1,7 @@
 package com.itj.sandersonwidget.ui.helper
 
+import android.app.WallpaperManager
+import android.app.WallpaperManager.FLAG_SYSTEM
 import android.content.Context
 import android.os.Build
 import com.itj.sandersonwidget.R
@@ -28,24 +30,37 @@ internal sealed class Theme(val id: Int) {
 }
 
 internal fun fetchThemeColors(context: Context, themeResId: Int): ThemeColors {
-    val defaultColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        context.getColor(android.R.color.white)
-    } else {
-        context.resources.getColor(android.R.color.white)
-    }
-
     val attrs = intArrayOf(R.attr.appWidgetTextColor)
     val styledAttr = context.obtainStyledAttributes(themeResId, attrs)
-    val textColor = styledAttr.getColor(0, defaultColor)
+    val textColor = styledAttr.getColor(0, getDefaultTextColor(context))
     styledAttr.recycle()
 
     val attrs1 = intArrayOf(R.attr.appWidgetProgressBarColor)
     val styledAttr1 =
         context.obtainStyledAttributes(themeResId, attrs1)
-    val progressColor = styledAttr1.getColor(0, defaultColor)
+    val progressColor = styledAttr1.getColor(0, getDefaultProgressColor(context))
     styledAttr1.recycle()
 
     return ThemeColors(textColor = textColor, progressColor = progressColor)
+}
+
+private fun getDefaultTextColor(context: Context): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        context.getColor(android.R.color.white)
+    } else {
+        context.resources.getColor(android.R.color.white)
+    }
+}
+
+private fun getDefaultProgressColor(context: Context): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        WallpaperManager.getInstance(context).getWallpaperColors(FLAG_SYSTEM)?.primaryColor?.toArgb()
+            ?: context.getColor(android.R.color.holo_blue_dark)
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        context.getColor(android.R.color.holo_blue_dark)
+    } else {
+        context.resources.getColor(android.R.color.holo_blue_dark)
+    }
 }
 
 internal fun Int.fetchThemeResId(): Int {
