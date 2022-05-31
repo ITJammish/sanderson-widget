@@ -20,7 +20,7 @@ The first step is to get the widget app (it's an app as far as your device is co
 Once installed you have to find the Widget menu (Widgets aren't allowed to play with all the other apps, they get their own menu). Different phones have different ways of getting to this menu. Even Google doesn't make it obvious, but thankfully they've got some information [here](https://support.google.com/android/answer/9450271?hl=en-GB#zippy=%2Cadd-or-resize-a-widget) that can help.
 
 ## Getting started
-In order to run this project simply pull the code, build, install and have fun. Since we're not using an API there is no user ID keys required, but please be respectful and don't [DOS](https://en.wikipedia.org/wiki/Denial-of-service_attack) Brandon's website. Or if that's really your bag, please don't use this project to do so.
+The easiest way is to install the widget from the [Google Play Store](https://play.google.com/store/apps/details?id=com.itj.sandersonwidget). In order to run this project manually simply pull the code, build, install and have fun. Since we're not using an API there is no user ID keys required, but please be respectful and don't [DOS](https://en.wikipedia.org/wiki/Denial-of-service_attack) Brandon's website. Or if that's really your bag, please don't use this project to do so.
 
 If you'd like to learn more about coding widgets [this is a good introduction](https://developer.android.com/guide/topics/appwidgets/overview). [Android Studio](https://developer.android.com/studio) also offers a Widget template that is a very useful place to start. I also found [this video tutorial series](https://www.youtube.com/playlist?list=PLrnPJCHvNZuDCoET8jL2VK4YVRNhVEy0K) by [Coding in Flow](https://www.youtube.com/c/CodinginFlow) very helpful.
 

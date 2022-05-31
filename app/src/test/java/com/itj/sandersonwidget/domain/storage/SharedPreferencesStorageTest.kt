@@ -210,7 +210,7 @@ class SharedPreferencesStorageTest {
         every {
             mockSharedPreferences.getInt(
                 SharedPreferencesStorage.PREF_THEME_ID + APP_WIDGET_ID,
-                R.style.Theme_SandersonWidget_AppWidgetContainer_WayOfKings
+                R.style.Theme_SandersonWidget_AppWidgetContainer_Blank
             )
         } returns THEME_ID
 
