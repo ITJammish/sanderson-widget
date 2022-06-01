@@ -31,6 +31,26 @@
 
     <style name="Theme.SandersonWidget.AppWidgetContainer.Blank" />
 
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank.Orange">
+        <item name="appWidgetProgressBarColor">@android:color/holo_orange_dark</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank.Blue">
+        <item name="appWidgetProgressBarColor">@android:color/holo_blue_dark</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank.Green">
+        <item name="appWidgetProgressBarColor">@android:color/holo_green_dark</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank.Purple">
+        <item name="appWidgetProgressBarColor">@android:color/holo_purple</item>
+    </style>
+
+    <style name="Theme.SandersonWidget.AppWidgetContainer.Blank.Red">
+        <item name="appWidgetProgressBarColor">@android:color/holo_red_dark</item>
+    </style>
+
     <!-- Disabled until they're worked on more post 1.0 -->
 <!--    <style name="Theme.SandersonWidget.AppWidgetContainer.WayOfKings">-->
 <!--        <item name="appWidgetBackgroundImage">@drawable/way_of_kings</item>-->

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">SandersonWidget</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
@@ -8,11 +8,18 @@
     <string name="select_theme_label">Select theme</string>
     <string name="please_resize_this_widget_to_get_started">Please resize this widget to get started. (Long press and release).</string>
 
-    <string-array name="themes_array">
-        <item>None</item>
-        <!--<item>Way of Kings</item>-->
-        <!--<item>Words of Radiance</item>-->
-        <!--<item>Oathbringer</item>-->
-        <item>Roshar map</item>
+    <string name="theme_label_blank">Match wallpaper</string>
+    <string name="theme_label_blank_orange">Orange</string>
+    <string name="theme_label_blank_blue">Blue</string>
+    <string name="theme_label_blank_green">Green</string>
+    <string name="theme_label_blank_purple">Purple</string>
+    <string name="theme_label_blank_red">Red</string>
+
+    <string-array name="themes_array" tools:ignore="InconsistentArrays">
+        <item>@string/theme_label_blank_orange</item>
+        <item>@string/theme_label_blank_blue</item>
+        <item>@string/theme_label_blank_green</item>
+        <item>@string/theme_label_blank_purple</item>
+        <item>@string/theme_label_blank_red</item>
     </string-array>
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="themes_array" tools:ignore="InconsistentArrays">
+        <item>@string/theme_label_blank</item>
+        <item>@string/theme_label_blank_orange</item>
+        <item>@string/theme_label_blank_blue</item>
+        <item>@string/theme_label_blank_green</item>
+        <item>@string/theme_label_blank_purple</item>
+        <item>@string/theme_label_blank_red</item>
+    </string-array>
+</resources>
