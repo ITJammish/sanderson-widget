@@ -21,7 +21,7 @@ interface Storage {
 
     fun retrieveProgressItemData(): List<ProgressItem>
 
-    fun storeArticleData(items: List<Article>)
+    fun storeArticleData(articles: List<Article>)
 
     fun retrieveArticleData(): List<Article>
 

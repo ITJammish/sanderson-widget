@@ -41,32 +41,94 @@ internal fun createNotificationChannel(context: Context) {
     }
 }
 
-internal fun pushNewProgressItemNotification(context: Context, progressItem: ProgressItem) {
+internal fun pushNewProgressItemNotification(
+    context: Context,
+    progressItem: ProgressItem,
+    newItemCount: Int,
+    updatedItemCount: Int,
+) {
     val contentTitle = String.format(
         context.getString(R.string.notification_new_progress_item_title),
         progressItem.label,
         progressItem.progressPercentage,
     )
 
+    val otherNewItemCount = newItemCount - 1
+    val contentText: String? = with(context) {
+        if (otherNewItemCount > 0 && updatedItemCount > 0) {
+            val newItemContent =
+                resources.getQuantityString(R.plurals.other_new_items, otherNewItemCount, otherNewItemCount)
+            val updatedItemContent =
+                resources.getQuantityString(R.plurals.updated_items, updatedItemCount, updatedItemCount)
+            String.format(
+                getString(R.string.notification_new_progress_item_content_new_and_existing_items),
+                newItemContent,
+                updatedItemContent,
+            )
+        } else if (otherNewItemCount > 0) {
+            val newItemContent =
+                resources.getQuantityString(R.plurals.other_new_items, otherNewItemCount, otherNewItemCount)
+            String.format(
+                getString(R.string.notification_new_progress_item_content_new_items_only),
+                newItemContent,
+            )
+        } else if (updatedItemCount > 0) {
+            val updatedItemContent =
+                resources.getQuantityString(R.plurals.other_updated_items, updatedItemCount, updatedItemCount)
+            String.format(
+                getString(R.string.notification_new_progress_item_content_new_items_only),
+                updatedItemContent,
+            )
+        } else {
+            null
+        }
+    }
+
     val builder = getBaseNotificationBuilder(context)
-        .setContentTitle(contentTitle)
+        .setContentTitle(contentTitle).also {
+            if (contentText != null) {
+                it.setContentText(contentText)
+            }
+        }
     NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
 }
 
-internal fun pushProgressItemUpdatedNotification(context: Context, progressItem: ProgressItem) {
+internal fun pushProgressItemUpdatedNotification(
+    context: Context,
+    progressItem: ProgressItem,
+    updatedItemCount: Int,
+) {
     val contentTitle = String.format(
         context.getString(R.string.notification_progress_item_updated_title),
         progressItem.label,
         progressItem.progressPercentage,
     )
 
+    val otherUpdatedItemCount = updatedItemCount - 1
+    val contentText: String? = with(context) {
+        if (otherUpdatedItemCount > 0) {
+            val otherUpdatedItemContent =
+                resources.getQuantityString(R.plurals.other_updated_items, otherUpdatedItemCount, otherUpdatedItemCount)
+            String.format(
+                getString(R.string.notification_progress_item_updated_content_existing_items_only),
+                otherUpdatedItemContent,
+            )
+        } else {
+            null
+        }
+    }
+
     val builder = getBaseNotificationBuilder(context)
-        .setContentTitle(contentTitle)
+        .setContentTitle(contentTitle).also {
+            if (contentText != null) {
+                it.setContentText(contentText)
+            }
+        }
     NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
 }
 
 @SuppressLint("UnspecifiedImmutableFlag")
-internal fun pushNewArticleNotification(context: Context, article: Article) {
+internal fun pushNewArticleNotification(context: Context, article: Article, articleCount: Int) {
     val browserLaunchIntent = Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse(article.articleUrl)
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -80,7 +142,20 @@ internal fun pushNewArticleNotification(context: Context, article: Article) {
         }
 
     val contentTitle = String.format(context.getString(R.string.notification_new_article_title), article.title)
-    val contentText = context.getString(R.string.notification_new_article_content)
+
+    val otherArticlesCount = articleCount - 1
+    val contentText = with(context) {
+        if (otherArticlesCount > 0) {
+            val otherNewArticlesContent =
+                resources.getQuantityString(R.plurals.other_new_articles, otherArticlesCount, otherArticlesCount)
+            String.format(
+                getString(R.string.notification_multiple_new_article_content),
+                otherNewArticlesContent,
+            )
+        } else {
+            getString(R.string.notification_new_article_content)
+        }
+    }
 
     val builder = getBaseNotificationBuilder(context)
         .setContentTitle(contentTitle)

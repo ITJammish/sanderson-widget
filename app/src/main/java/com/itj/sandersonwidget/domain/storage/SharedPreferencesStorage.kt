@@ -60,9 +60,9 @@ class SharedPreferencesStorage(context: Context) : Storage {
             .map { ProgressItem(it[1], it[2]) }
     }
 
-    override fun storeArticleData(items: List<Article>) {
+    override fun storeArticleData(articles: List<Article>) {
         // Sets are not ordered. Need to add OG position to encoding and sort by this in decode
-        val encodedArticles = items.mapIndexed { index, article ->
+        val encodedArticles = articles.mapIndexed { index, article ->
             "$index$DELIMITER${article.title}$DELIMITER${article.articleUrl}$DELIMITER${article.thumbnailUrl}"
         }
         with(sharedPreferences.edit()) {

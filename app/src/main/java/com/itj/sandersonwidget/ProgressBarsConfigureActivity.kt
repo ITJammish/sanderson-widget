@@ -94,11 +94,6 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
             }
             onItemSelectedListener = onThemeSpinnerItemSelectedListener
         }
-
-        // TODO remove
-        binding.notificationTestButton.setOnClickListener {
-//            createTestNotification(this)
-        }
     }
 
     private fun onAddWidgetClick() {

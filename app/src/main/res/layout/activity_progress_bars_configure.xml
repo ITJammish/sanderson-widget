@@ -61,10 +61,4 @@
             app:layout_constraintStart_toEndOf="@+id/theme_label"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/notification_test_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Notification test" />
 </LinearLayout>
