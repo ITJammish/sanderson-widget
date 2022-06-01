@@ -13,6 +13,7 @@ import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.ui.helper.Theme.*
+import com.itj.sandersonwidget.ui.notifications.createNotificationChannel
 
 /**
  * The configuration screen for the [ProgressBarsWidgetProvider] AppWidget.
@@ -47,6 +48,7 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
         binding = ActivityProgressBarsConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        createNotificationChannel(this)
         setAppWidgetId()
         bindViews()
     }
@@ -91,6 +93,11 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
             onItemSelectedListener = onThemeSpinnerItemSelectedListener
+        }
+
+        // TODO remove
+        binding.notificationTestButton.setOnClickListener {
+//            createTestNotification(this)
         }
     }
 

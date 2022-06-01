@@ -166,6 +166,7 @@ internal fun updateAppWidget(
     appWidgetManager.updateAppWidget(appWidgetId, views)
 }
 
+// TODO increase 15 mins to every 2 hours in prod -> need flavour based properties file/BuildConfig.etc
 internal fun startWorkRequest(context: Context) {
     val workRequestTag = "WORK_REQUEST"
     val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
