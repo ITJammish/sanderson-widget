@@ -46,6 +46,10 @@
     <string name="theme_label_blank_green">Green</string>
     <string name="theme_label_blank_purple">Purple</string>
     <string name="theme_label_blank_red">Red</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_progress_update_notifications">Enable progress update notifications</string>
+    <string name="enable_article_notifications">Enable article notifications</string>
+    <string name="general">General</string>
 
     <string-array name="themes_array" tools:ignore="InconsistentArrays">
         <item>@string/theme_label_blank_orange</item>

@@ -83,6 +83,9 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
 
     private fun bindViews() {
         binding.articleSwitch.isChecked = sharedPreferences.retrieveArticlesEnabled(appWidgetId)
+        binding.progressItemsNotificationsSwitch.isChecked =
+            sharedPreferences.retrieveProgressUpdateNotificationsEnabled()
+        binding.articleNotificationsSwitch.isChecked = sharedPreferences.retrieveArticleUpdateNotificationsEnabled()
 
         with(binding.themeSpinner) {
             adapter = ArrayAdapter.createFromResource(
@@ -100,9 +103,11 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
         val context = this@ProgressBarsConfigureActivity
 
         // When the button is clicked, store the prefs locally
-        // Store article preference
-        val articlesEnabled = binding.articleSwitch.isChecked
-        sharedPreferences.storeArticlesEnabled(appWidgetId, articlesEnabled)
+        with(sharedPreferences) {
+            storeArticlesEnabled(appWidgetId, binding.articleSwitch.isChecked)
+            storeProgressUpdateNotificationsEnabled(binding.progressItemsNotificationsSwitch.isChecked)
+            storeArticleUpdateNotificationsEnabled(binding.articleNotificationsSwitch.isChecked)
+        }
 
         // Store chosen theme
         if (chosenThemeLabel != NO_THEME_CHOSEN) {

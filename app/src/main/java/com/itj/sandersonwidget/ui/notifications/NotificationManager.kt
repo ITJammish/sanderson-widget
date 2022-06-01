@@ -17,8 +17,9 @@ import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
 
 private const val CHANNEL_ID = "com.itj.sandersonwidget.NOTIFICATION_CHANNEL_ID"
-private const val NOTIFICATION_ID = 1
-private const val NOTIFICATION_ICON_RES_ID = R.drawable.abc_vector_test
+private const val NOTIFICATION_ID_PROGRESS_ITEM = 1
+private const val NOTIFICATION_ID_ARTICLE = 2
+private const val NOTIFICATION_ICON_RES_ID = R.drawable.ic_launcher_foreground
 
 /**
  * Create the NotificationChannel, but only on API 26+ because the NotificationChannel class is "new" and not in the
@@ -90,7 +91,7 @@ internal fun pushNewProgressItemNotification(
                 it.setContentText(contentText)
             }
         }
-    NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
+    NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_PROGRESS_ITEM, builder.build())
 }
 
 internal fun pushProgressItemUpdatedNotification(
@@ -124,7 +125,7 @@ internal fun pushProgressItemUpdatedNotification(
                 it.setContentText(contentText)
             }
         }
-    NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
+    NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_PROGRESS_ITEM, builder.build())
 }
 
 @SuppressLint("UnspecifiedImmutableFlag")
@@ -161,7 +162,7 @@ internal fun pushNewArticleNotification(context: Context, article: Article, arti
         .setContentTitle(contentTitle)
         .setContentText(contentText)
         .setContentIntent(pendingIntent)
-    NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
+    NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_ARTICLE, builder.build())
 }
 
 private fun getBaseNotificationBuilder(context: Context): NotificationCompat.Builder {

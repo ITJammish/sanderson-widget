@@ -14,10 +14,11 @@ class NotificationTriggeringStorage(
 ) : Storage by innerStorage {
 
     override fun storeProgressItemData(items: List<ProgressItem>) {
+        val progressItemNotificationsEnabled = innerStorage.retrieveProgressUpdateNotificationsEnabled()
         val existingProgressItems = innerStorage.retrieveProgressItemData()
 
         // Don't push a notification if it's the first fetch (that would just be annoying)
-        if (existingProgressItems.isNotEmpty()) {
+        if (progressItemNotificationsEnabled && existingProgressItems.isNotEmpty()) {
             val existingProgressItemLabels = existingProgressItems.map { item -> item.label }
             val newItems = mutableListOf<ProgressItem>()
             val updatedItems = mutableListOf<ProgressItem>()
@@ -43,10 +44,11 @@ class NotificationTriggeringStorage(
     }
 
     override fun storeArticleData(articles: List<Article>) {
+        val articleNotificationsEnabled = innerStorage.retrieveArticleUpdateNotificationsEnabled()
         val existingArticles = innerStorage.retrieveArticleData()
 
         // Don't push a notification if it's the first fetch (that would just be annoying)
-        if (existingArticles.isNotEmpty()) {
+        if (articleNotificationsEnabled && existingArticles.isNotEmpty()) {
             val newArticles = articles.minus(existingArticles.toSet())
 
             if (newArticles.isNotEmpty()) {

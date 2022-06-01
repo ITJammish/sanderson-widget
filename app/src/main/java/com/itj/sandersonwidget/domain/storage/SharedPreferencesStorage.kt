@@ -6,6 +6,8 @@ import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_ARTICLES_ENABLED
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_ARTICLE_NOTIFICATIONS_ENABLED
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_PROGRESS_ITEM_NOTIFICATIONS_ENABLED
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_THEME_RES_ID
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.INVALID_INT
 
@@ -20,6 +22,8 @@ class SharedPreferencesStorage(context: Context) : Storage {
         internal const val ARTICLES = "articles"
         internal const val PREF_ARTICLES_ENABLED = "pref_articles_enabled"
         internal const val PREF_THEME_ID = "pref_theme_id"
+        internal const val PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED = "pref_progress_item_notifications_enabled"
+        internal const val PREF_ARTICLE_NOTIFICATIONS_ENABLED = "pref_article_notifications_enabled"
         internal const val PREF_LAYOUT_CONFIG = "pref_layout_config"
 
         internal const val DELIMITER = "DELIMITER"
@@ -103,6 +107,32 @@ class SharedPreferencesStorage(context: Context) : Storage {
             PREF_THEME_ID + appWidgetId,
             DEFAULT_THEME_RES_ID
         )
+    }
+
+    // todo ut
+    override fun storeProgressUpdateNotificationsEnabled(boolean: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED, boolean)
+            apply()
+        }
+    }
+
+    override fun retrieveProgressUpdateNotificationsEnabled(): Boolean {
+        return sharedPreferences.getBoolean(
+            PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED,
+            DEFAULT_PROGRESS_ITEM_NOTIFICATIONS_ENABLED
+        )
+    }
+
+    override fun storeArticleUpdateNotificationsEnabled(boolean: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(PREF_ARTICLE_NOTIFICATIONS_ENABLED, boolean)
+            apply()
+        }
+    }
+
+    override fun retrieveArticleUpdateNotificationsEnabled(): Boolean {
+        return sharedPreferences.getBoolean(PREF_ARTICLE_NOTIFICATIONS_ENABLED, DEFAULT_ARTICLE_NOTIFICATIONS_ENABLED)
     }
 
     override fun storeLayoutConfig(appWidgetId: Int, config: WidgetLayoutConfig) {
