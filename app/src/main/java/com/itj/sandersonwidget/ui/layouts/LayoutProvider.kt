@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
 import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
@@ -296,9 +295,9 @@ class LayoutProvider {
         width: Int,
         height: Int,
     ) {
-        if (themeResId == R.style.Theme_SandersonWidget_AppWidgetContainer_Blank) {
-            return
-        }
+        // While themes without backgrounds are disabled we are returning here
+        // TODO when backgrounds are supported: re-enable, rework to crop and reduce image stretching
+        return
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 //            bindStyledBackground(context)
