@@ -2,6 +2,7 @@ package com.itj.sandersonwidget.domain
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import com.itj.sandersonwidget.domain.storage.NotificationTriggeringStorage
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.utils.ComponentNameFetcher
@@ -18,7 +19,7 @@ import org.jsoup.Jsoup
  */
 class WebScraperResponseHandler(
     private val context: Context,
-    private val store: Storage = SharedPreferencesStorage(context),
+    private val store: Storage = NotificationTriggeringStorage(context, SharedPreferencesStorage(context)),
     private val htmlParser: HTMLParser = HTMLParser(),
     private val intentProvider: IntentProvider = IntentProviderImpl(),
     private val componentNameFetcher: ComponentNameFetcher = ComponentNameFetcherImpl(),

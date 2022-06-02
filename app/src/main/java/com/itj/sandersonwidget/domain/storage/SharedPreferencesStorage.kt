@@ -6,6 +6,8 @@ import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
 import com.itj.sandersonwidget.domain.model.WidgetLayoutConfig
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_ARTICLES_ENABLED
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_ARTICLE_NOTIFICATIONS_ENABLED
+import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_PROGRESS_ITEM_NOTIFICATIONS_ENABLED
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.DEFAULT_THEME_RES_ID
 import com.itj.sandersonwidget.domain.storage.Storage.Companion.INVALID_INT
 
@@ -20,6 +22,8 @@ class SharedPreferencesStorage(context: Context) : Storage {
         internal const val ARTICLES = "articles"
         internal const val PREF_ARTICLES_ENABLED = "pref_articles_enabled"
         internal const val PREF_THEME_ID = "pref_theme_id"
+        internal const val PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED = "pref_progress_item_notifications_enabled"
+        internal const val PREF_ARTICLE_NOTIFICATIONS_ENABLED = "pref_article_notifications_enabled"
         internal const val PREF_LAYOUT_CONFIG = "pref_layout_config"
 
         internal const val DELIMITER = "DELIMITER"
@@ -60,9 +64,9 @@ class SharedPreferencesStorage(context: Context) : Storage {
             .map { ProgressItem(it[1], it[2]) }
     }
 
-    override fun storeArticleData(items: List<Article>) {
+    override fun storeArticleData(articles: List<Article>) {
         // Sets are not ordered. Need to add OG position to encoding and sort by this in decode
-        val encodedArticles = items.mapIndexed { index, article ->
+        val encodedArticles = articles.mapIndexed { index, article ->
             "$index$DELIMITER${article.title}$DELIMITER${article.articleUrl}$DELIMITER${article.thumbnailUrl}"
         }
         with(sharedPreferences.edit()) {
@@ -103,6 +107,31 @@ class SharedPreferencesStorage(context: Context) : Storage {
             PREF_THEME_ID + appWidgetId,
             DEFAULT_THEME_RES_ID
         )
+    }
+
+    override fun storeProgressUpdateNotificationsEnabled(boolean: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED, boolean)
+            apply()
+        }
+    }
+
+    override fun retrieveProgressUpdateNotificationsEnabled(): Boolean {
+        return sharedPreferences.getBoolean(
+            PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED,
+            DEFAULT_PROGRESS_ITEM_NOTIFICATIONS_ENABLED
+        )
+    }
+
+    override fun storeArticleUpdateNotificationsEnabled(boolean: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(PREF_ARTICLE_NOTIFICATIONS_ENABLED, boolean)
+            apply()
+        }
+    }
+
+    override fun retrieveArticleUpdateNotificationsEnabled(): Boolean {
+        return sharedPreferences.getBoolean(PREF_ARTICLE_NOTIFICATIONS_ENABLED, DEFAULT_ARTICLE_NOTIFICATIONS_ENABLED)
     }
 
     override fun storeLayoutConfig(appWidgetId: Int, config: WidgetLayoutConfig) {

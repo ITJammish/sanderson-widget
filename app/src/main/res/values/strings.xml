@@ -8,12 +8,48 @@
     <string name="select_theme_label">Select theme</string>
     <string name="please_resize_this_widget_to_get_started">Please resize this widget to get started. (Long press and release).</string>
 
+    <!-- Notification strings -->
+    <string name="notification_channel_name">Sanderson progress notification channel</string>
+    <string name="notification_channel_description">Notification channel to display optional notifications alerting of Brandon Sanderson\'s writing progress updates.</string>
+
+    <string name="notification_new_progress_item_title">New project added: %1$s at %2$s%%</string>
+    <string name="notification_new_progress_item_content_new_and_existing_items">There %1$s, and %2$s.</string>
+    <string name="notification_new_progress_item_content_new_items_only">There %s.</string>
+    <plurals name="other_new_items">
+        <item quantity="one">is also %s other new project</item>
+        <item quantity="other">are also %s other new projects</item>
+    </plurals>
+    <plurals name="updated_items">
+        <item quantity="one">%s updated project</item>
+        <item quantity="other">%s updated projects</item>
+    </plurals>
+
+    <string name="notification_progress_item_updated_title">Project updated: %1$s now at %2$s%%</string>
+    <string name="notification_progress_item_updated_content_existing_items_only">There %s.</string>
+    <plurals name="other_updated_items">
+        <item quantity="one">is also %s other updated project</item>
+        <item quantity="other">are also %s other updated projects</item>
+    </plurals>
+
+    <string name="notification_new_article_title">New article: %s</string>
+    <string name="notification_new_article_content">Click here to open</string>
+    <string name="notification_multiple_new_article_content">Click here to open. %s.</string>
+    <plurals name="other_new_articles">
+        <item quantity="one">There is also %s other new article</item>
+        <item quantity="other">There are also %s other new articles</item>
+    </plurals>
+
+    <!-- Theme strings -->
     <string name="theme_label_blank">Match wallpaper</string>
     <string name="theme_label_blank_orange">Orange</string>
     <string name="theme_label_blank_blue">Blue</string>
     <string name="theme_label_blank_green">Green</string>
     <string name="theme_label_blank_purple">Purple</string>
     <string name="theme_label_blank_red">Red</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_progress_update_notifications">Enable progress update notifications</string>
+    <string name="enable_article_notifications">Enable article notifications</string>
+    <string name="general">General</string>
 
     <string-array name="themes_array" tools:ignore="InconsistentArrays">
         <item>@string/theme_label_blank_orange</item>

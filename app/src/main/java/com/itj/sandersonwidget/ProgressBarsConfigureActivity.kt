@@ -13,6 +13,7 @@ import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.ui.helper.Theme.*
+import com.itj.sandersonwidget.ui.notifications.NotificationManager
 
 /**
  * The configuration screen for the [ProgressBarsWidgetProvider] AppWidget.
@@ -47,6 +48,7 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
         binding = ActivityProgressBarsConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        NotificationManager().createNotificationChannel(this)
         setAppWidgetId()
         bindViews()
     }
@@ -81,6 +83,9 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
 
     private fun bindViews() {
         binding.articleSwitch.isChecked = sharedPreferences.retrieveArticlesEnabled(appWidgetId)
+        binding.progressItemsNotificationsSwitch.isChecked =
+            sharedPreferences.retrieveProgressUpdateNotificationsEnabled()
+        binding.articleNotificationsSwitch.isChecked = sharedPreferences.retrieveArticleUpdateNotificationsEnabled()
 
         with(binding.themeSpinner) {
             adapter = ArrayAdapter.createFromResource(
@@ -98,9 +103,11 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
         val context = this@ProgressBarsConfigureActivity
 
         // When the button is clicked, store the prefs locally
-        // Store article preference
-        val articlesEnabled = binding.articleSwitch.isChecked
-        sharedPreferences.storeArticlesEnabled(appWidgetId, articlesEnabled)
+        with(sharedPreferences) {
+            storeArticlesEnabled(appWidgetId, binding.articleSwitch.isChecked)
+            storeProgressUpdateNotificationsEnabled(binding.progressItemsNotificationsSwitch.isChecked)
+            storeArticleUpdateNotificationsEnabled(binding.articleNotificationsSwitch.isChecked)
+        }
 
         // Store chosen theme
         if (chosenThemeLabel != NO_THEME_CHOSEN) {
