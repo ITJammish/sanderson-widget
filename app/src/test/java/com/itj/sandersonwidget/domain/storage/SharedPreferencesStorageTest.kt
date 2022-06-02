@@ -220,6 +220,112 @@ class SharedPreferencesStorageTest {
     }
 
     @Test
+    fun storeProgressUpdateNotificationsEnabled_true() {
+        subject.storeProgressUpdateNotificationsEnabled(true)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putBoolean(
+                SharedPreferencesStorage.PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED,
+                true
+            )
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun storeProgressUpdateNotificationsEnabled_false() {
+        subject.storeProgressUpdateNotificationsEnabled(false)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putBoolean(
+                SharedPreferencesStorage.PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED,
+                false
+            )
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun retrieveProgressUpdateNotificationsEnabled_true() {
+        every {
+            mockSharedPreferences.getBoolean(
+                SharedPreferencesStorage.PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED,
+                true
+            )
+        } returns true
+
+        val progressItemNotificationsEnabledResult = subject.retrieveProgressUpdateNotificationsEnabled()
+
+        assertTrue(progressItemNotificationsEnabledResult)
+    }
+
+    @Test
+    fun retrieveProgressUpdateNotificationsEnabled_false() {
+        every {
+            mockSharedPreferences.getBoolean(
+                SharedPreferencesStorage.PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED,
+                true
+            )
+        } returns false
+
+        val progressItemNotificationsEnabledResult = subject.retrieveProgressUpdateNotificationsEnabled()
+
+        assertFalse(progressItemNotificationsEnabledResult)
+    }
+
+    @Test
+    fun storeArticleUpdateNotificationsEnabled_true() {
+        subject.storeArticleUpdateNotificationsEnabled(true)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putBoolean(SharedPreferencesStorage.PREF_ARTICLE_NOTIFICATIONS_ENABLED, true)
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun storeArticleUpdateNotificationsEnabled_false() {
+        subject.storeArticleUpdateNotificationsEnabled(false)
+
+        verify {
+            mockSharedPreferences.edit()
+            mockSharedPreferencesEditor.putBoolean(SharedPreferencesStorage.PREF_ARTICLE_NOTIFICATIONS_ENABLED, false)
+            mockSharedPreferencesEditor.apply()
+        }
+    }
+
+    @Test
+    fun retrieveArticleUpdateNotificationsEnabled_true() {
+        every {
+            mockSharedPreferences.getBoolean(
+                SharedPreferencesStorage.PREF_ARTICLE_NOTIFICATIONS_ENABLED,
+                true
+            )
+        } returns true
+
+        val articleNotificationsEnabledResult = subject.retrieveArticleUpdateNotificationsEnabled()
+
+        assertTrue(articleNotificationsEnabledResult)
+    }
+
+    @Test
+    fun retrieveArticleUpdateNotificationsEnabled_false() {
+        every {
+            mockSharedPreferences.getBoolean(
+                SharedPreferencesStorage.PREF_ARTICLE_NOTIFICATIONS_ENABLED,
+                true
+            )
+        } returns false
+
+        val articleNotificationsEnabledResult = subject.retrieveArticleUpdateNotificationsEnabled()
+
+        assertFalse(articleNotificationsEnabledResult)
+    }
+
+    @Test
     fun storeLayoutConfig() {
         subject.storeLayoutConfig(APP_WIDGET_ID, mockWidgetLayoutConfig)
 

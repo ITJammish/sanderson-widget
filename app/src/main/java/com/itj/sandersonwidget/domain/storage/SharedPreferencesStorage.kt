@@ -109,7 +109,6 @@ class SharedPreferencesStorage(context: Context) : Storage {
         )
     }
 
-    // todo ut
     override fun storeProgressUpdateNotificationsEnabled(boolean: Boolean) {
         with(sharedPreferences.edit()) {
             putBoolean(PREF_PROGRESS_ITEM_NOTIFICATIONS_ENABLED, boolean)

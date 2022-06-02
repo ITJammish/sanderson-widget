@@ -43,7 +43,6 @@ class WebScraperWorkerTest {
 
     @Test
     fun doWork() {
-
         result = subject.doWork()
 
         verify {

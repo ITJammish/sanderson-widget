@@ -3,14 +3,12 @@ package com.itj.sandersonwidget.domain.storage
 import android.content.Context
 import com.itj.sandersonwidget.domain.model.Article
 import com.itj.sandersonwidget.domain.model.ProgressItem
-import com.itj.sandersonwidget.ui.notifications.pushNewArticleNotification
-import com.itj.sandersonwidget.ui.notifications.pushNewProgressItemNotification
-import com.itj.sandersonwidget.ui.notifications.pushProgressItemUpdatedNotification
+import com.itj.sandersonwidget.ui.notifications.NotificationManager
 
-// TODO ut
 class NotificationTriggeringStorage(
     private val context: Context,
     private val innerStorage: Storage,
+    private val notificationManager: NotificationManager = NotificationManager(),
 ) : Storage by innerStorage {
 
     override fun storeProgressItemData(items: List<ProgressItem>) {
@@ -34,9 +32,18 @@ class NotificationTriggeringStorage(
 
             // Determine which notification to show
             if (newItems.isNotEmpty()) {
-                pushNewProgressItemNotification(context, newItems.first(), newItems.count(), updatedItems.count())
+                notificationManager.pushNewProgressItemNotification(
+                    context,
+                    newItems.first(),
+                    newItems.count(),
+                    updatedItems.count()
+                )
             } else if (updatedItems.isNotEmpty()) {
-                pushProgressItemUpdatedNotification(context, updatedItems.first(), updatedItems.count())
+                notificationManager.pushProgressItemUpdatedNotification(
+                    context,
+                    updatedItems.first(),
+                    updatedItems.count()
+                )
             }
         }
 
@@ -52,7 +59,7 @@ class NotificationTriggeringStorage(
             val newArticles = articles.minus(existingArticles.toSet())
 
             if (newArticles.isNotEmpty()) {
-                pushNewArticleNotification(context, newArticles.first(), newArticles.count())
+                notificationManager.pushNewArticleNotification(context, newArticles.first(), newArticles.count())
             }
         }
 

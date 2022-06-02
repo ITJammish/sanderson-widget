@@ -13,7 +13,7 @@ import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
 import com.itj.sandersonwidget.ui.helper.Theme.*
-import com.itj.sandersonwidget.ui.notifications.createNotificationChannel
+import com.itj.sandersonwidget.ui.notifications.NotificationManager
 
 /**
  * The configuration screen for the [ProgressBarsWidgetProvider] AppWidget.
@@ -48,7 +48,7 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
         binding = ActivityProgressBarsConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        createNotificationChannel(this)
+        NotificationManager().createNotificationChannel(this)
         setAppWidgetId()
         bindViews()
     }
