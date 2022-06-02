@@ -5,9 +5,6 @@
     android:usesCleartextTraffic="true"
     tools:targetApi="m">
 
-    <!-- TODO check against older versions: maybe need a manifest for <android M compat -->
-    <!-- TODO app icon etc :D -->
-
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
