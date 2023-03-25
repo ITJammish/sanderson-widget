@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.TextNode
 
 /**
- * Parses data based on html implementation of https://www.brandonsanderson.com/ on 12/04/2022
+ * Parses data based on html implementation of https://www.brandonsanderson.com/ on 25/03/2023
  */
 class HTMLParser {
 
@@ -18,7 +18,7 @@ class HTMLParser {
         private const val POST_NAME_CLASS = "entry-title"
         private const val POST_NAME_ATTRIBUTE_TAG = "a"
         private const val POST_NAME_ATTRIBUTE_HREF = "href"
-        private const val POST_URL_CLASS = "blog-thumb-lazy-load preload-me lazy-load"
+        private const val POST_URL_CLASS = "blog-thumb-lazy-load preload-me lazy-load aspect"
         private const val POST_URL_CLASS_IMG_ATTRIBUTE = "data-srcset"
     }
 
