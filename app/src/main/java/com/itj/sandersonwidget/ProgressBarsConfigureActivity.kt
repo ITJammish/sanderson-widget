@@ -4,11 +4,13 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import com.itj.sandersonwidget.databinding.ActivityProgressBarsConfigureBinding
 import com.itj.sandersonwidget.domain.storage.SharedPreferencesStorage
 import com.itj.sandersonwidget.domain.storage.Storage
@@ -50,19 +52,8 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
 
         NotificationManager().createNotificationChannel(this)
         setAppWidgetId()
+        addMenuItems()
         bindViews()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_configuration, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_add_widget -> onAddWidgetClick()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setAppWidgetId() {
@@ -79,6 +70,21 @@ class ProgressBarsConfigureActivity : AppCompatActivity() {
             finish()
             return
         }
+    }
+
+    private fun addMenuItems() {
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_activity_configuration, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.menu_item_add_widget -> onAddWidgetClick()
+                }
+                return false
+            }
+        })
     }
 
     private fun bindViews() {

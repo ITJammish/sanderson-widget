@@ -16,9 +16,6 @@ import com.itj.sandersonwidget.domain.WebScraperResponseHandler
 class WebScraperWorker(private val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
 
-    companion object {
-    }
-
     override fun doWork(): Result {
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(context)
